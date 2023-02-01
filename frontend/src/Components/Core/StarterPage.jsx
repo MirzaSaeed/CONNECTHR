@@ -23,7 +23,7 @@ const StarterPage = () => {
   const [basicActive, setBasicActive] = useState("admin");
   const isUserAuth = async () => {
     const res = await axios
-      .get("/auth/admin/me/", {
+      .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${token.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -59,7 +59,7 @@ const StarterPage = () => {
 
     // ! Fetch API data
     let response = await axios
-      .post("/auth/admin/login/", formData)
+      .post("http://localhost:9000/auth/admin/login/", formData)
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -76,7 +76,7 @@ const StarterPage = () => {
 
     // ! Fetch API data
     let response = await axios
-      .post("/auth/employee/login/", formData)
+      .post("http://localhost:9000/auth/employee/login/", formData)
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));

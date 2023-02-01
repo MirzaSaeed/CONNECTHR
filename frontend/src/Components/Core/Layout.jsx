@@ -1,9 +1,6 @@
-import {
-  MDBContainer,
-  MDBRow,
-  MDBTypography,
-} from "mdb-react-ui-kit";
+import { MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React from "react";
+import logo from "../Core/Assets/ConnectHR.png";
 
 const Layout = ({ children }) => {
   return (
@@ -24,12 +21,11 @@ const Layout = ({ children }) => {
                     Welcome to!
                   </MDBTypography>
                   <br />
-                  <MDBTypography tag="span">
-                    Employee Management System
-                  </MDBTypography>
+                  <MDBTypography style={{fontFamily: "Times New Roman", fontWeight: "lighter", fontSize: 90}} tag="span">Connect</MDBTypography>
+                  <MDBTypography color="primary" style={{fontFamily: "Cinzel", fontWeight: 'lighter', fontSize: 90}} tag="span">HR</MDBTypography>
                 </MDBTypography>
                 <MDBTypography tag="p" style={{ backgroundColor: "#FFFFFF" }}>
-                  A distributive system that helps managers and employees to
+                  A distributive employee management system that helps managers and employees to
                   work together and accurately monitor, access, manage, and
                   efficiently utilize the working hours for better business
                   growth.

@@ -14,8 +14,20 @@ const EmployeeSidebar = ({ children }) => {
     <div className="wrapper d-flex align-items-stretch">
       <nav id="sidebar">
         <div className="p-4 pt-3">
-          <MDBTypography tag="h1" style={{ fontSize: 26 + "px" }}>
-            <span className="text-primary">Employee</span> Management System
+        <MDBTypography tag="h1" style={{ fontSize: 43 + "px", display: "flex", justifyContent: "center"}}>
+            <MDBTypography
+              style={{ fontFamily: "Times New Roman", fontWeight: "lighter" }}
+              tag="span"
+            >
+              Connect
+            </MDBTypography>
+            <MDBTypography
+              color="primary"
+              style={{ fontFamily: "Cinzel", fontWeight: "lighter" }}
+              tag="span"
+            >
+              HR
+            </MDBTypography>
           </MDBTypography>
           <MDBListGroup className="list-unstyled components mb-5">
             <li>

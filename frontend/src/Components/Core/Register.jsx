@@ -60,7 +60,7 @@ const Register = () => {
     e.preventDefault();
     // ! Fetch API data
     let response = await axios
-      .post("/auth/admin/register/", formData)
+      .post("http://localhost:9000/auth/admin/register/", formData)
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       alert("Registration Successful");

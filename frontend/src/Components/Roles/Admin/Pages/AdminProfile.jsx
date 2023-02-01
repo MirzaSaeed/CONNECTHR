@@ -34,7 +34,7 @@ const AdminProfile = () => {
   };
   const response = async () => {
     await axios
-    .get("/auth/admin/me/", {
+    .get("http://localhost:9000/auth/admin/me/", {
       headers: { Authorization: `Bearer ${user.token}` },
     })
     .then((res) => setData(res.data));
@@ -100,7 +100,7 @@ const AdminProfile = () => {
                   <tr>
                     <th>Company URL:</th>
                     <td>
-                      <a href={data.companyURL}>{data.companyURL}</a>
+                      <a href={`${data.companyURL}`}>{data.companyURL}</a>
                     </td>
                   </tr>
                   <tr>

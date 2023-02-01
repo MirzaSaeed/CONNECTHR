@@ -33,7 +33,7 @@ const EmployeeProfile = () => {
   };
   const response = async () => {
     await axios
-      .get("/auth/employee/me/", {
+      .get("http://localhost:9000/auth/employee/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
