@@ -132,6 +132,7 @@ const loggedInuser = asyncHandler(async (req, res) => {
     totalEmployees,
     city,
     zipcode,
+    social,
   } = await userModel.findById(req.user.id);
   res.status(200).json({
     id: _id,
@@ -148,6 +149,7 @@ const loggedInuser = asyncHandler(async (req, res) => {
     totalEmployees,
     city,
     zipcode,
+    social,
   });
 });
 

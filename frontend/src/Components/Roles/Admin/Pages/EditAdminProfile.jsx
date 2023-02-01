@@ -18,7 +18,7 @@ import axios from "axios";
 
 const EditAdminProfile = () => {
   const navigate = useNavigate();
-  let user = JSON.parse(localStorage.getItem('user'));
+  let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/admin/me/", {
@@ -29,9 +29,9 @@ const EditAdminProfile = () => {
       navigate("*");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     isUserAuth();
-  },[]);
+  }, []);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -78,7 +78,7 @@ const EditAdminProfile = () => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .put(`/auth/admin/register/${user._id}`, formData,{
+      .put(`/auth/admin/register/${user._id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -109,7 +109,7 @@ const EditAdminProfile = () => {
         <Admin title="Edit Profile" />
         <MDBContainer fluid className="fadeIn">
           <div className="tab-pane" id="settings">
-            <form >
+            <form>
               <MDBTypography
                 tag="h6"
                 className="mb-3 text-uppercase bg-light p-2 rounded"
@@ -281,7 +281,7 @@ const EditAdminProfile = () => {
                     value={city}
                     onChange={onChange}
                   >
-                    <option value="DEFAULT" selected>
+                    <option value="" disabled selected>
                       Select The City
                     </option>
                     <option value="Islamabad">Islamabad</option>
@@ -543,8 +543,13 @@ const EditAdminProfile = () => {
                 </MDBCol>
               </MDBRow>
               <MDBCol>
-                <button className="btn btn-primary mb-4" type="button"
-                onClick={(e)=>{onSubmit(e)}}>
+                <button
+                  className="btn btn-primary mb-4"
+                  type="button"
+                  onClick={(e) => {
+                    onSubmit(e);
+                  }}
+                >
                   Save
                 </button>
               </MDBCol>

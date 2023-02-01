@@ -1,6 +1,5 @@
 import { MDBContainer, MDBRow, MDBTypography } from "mdb-react-ui-kit";
 import React from "react";
-import logo from "../Core/Assets/ConnectHR.png";
 
 const Layout = ({ children }) => {
   return (

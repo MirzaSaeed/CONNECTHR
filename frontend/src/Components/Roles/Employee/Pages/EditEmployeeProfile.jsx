@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
 import "../../../../app.css";
@@ -14,11 +14,83 @@ import {
   MDBRow,
   MDBTypography,
 } from "mdb-react-ui-kit";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
+import axios from "axios";
 
 const EditEmployeeProfile = () => {
-  
+  const navigate = useNavigate();
+  let user = JSON.parse(localStorage.getItem("user"));
+  const isUserAuth = async () => {
+    const res = await axios
+      .get("http://localhost:9000/auth/employee/me/", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (res.status === 401) {
+      navigate("*");
+    }
+  };
+  useEffect(() => {
+    isUserAuth();
+  }, []);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    birthday: "",
+    city: "",
+    email: "",
+    contactNumber: "",
+    password: "",
+    social: "",
+  });
+
+  const {
+    firstName,
+    lastName,
+    gender,
+    birthday,
+    city,
+    email,
+    contactNumber,
+    password,
+    social,
+  } = formData;
+
+  // * Console check
+  console.log(formData);
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value, //? for key used: name and for value used: value
+    }));
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    // ! Fetch API data PUT method
+    let response = await axios
+      .put(`/auth/employee/register/${user._id}`, formData, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (response) {
+      alert("Information Updated");
+      navigate("/auth/employee/home");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        gender: "",
+        birthday: "",
+        city: "",
+        email: "",
+        contactNumber: "",
+        password: "",
+        social: "",
+      });
+    }
+  };
+
   return (
     <EmployeeSidebar>
       <Loading>
@@ -34,38 +106,46 @@ const EditEmployeeProfile = () => {
                 Perosnal Information
               </MDBTypography>
 
-               <MDBRow className="mb-3 ">
+              <MDBRow className="mb-3 ">
                 <MDBCol>
                   <MDBInput
                     type="text"
-                    id="firstname"
-                    label="Enter first Name"
+                    id="firstName"
+                    label="First Name"
+                    name="firstName"
+                    value={firstName}
+                    onChange={onChange}
                   />
                 </MDBCol>
                 <MDBCol>
                   <MDBInput
                     type="text"
-                    id="firstname"
-                    label="Enter Last Name"
+                    id="lastName"
+                    label="Last Name"
+                    name="lastName"
+                    value={lastName}
+                    onChange={onChange}
                   />
                 </MDBCol>
               </MDBRow>
-               <MDBRow className="mb-3 ">
+              <MDBRow className="mb-3 ">
                 <MDBCol>
                   <label>Gender: </label>
                   <MDBRadio
-                    className="mx-3"
-                    name="inlineRadio"
-                    id="inlineRadio1"
+                    style={{ marginLeft: 10 + "px" }}
+                    name="gender"
                     value="Male"
+                    onChange={onChange}
+                    id="inlineRadio1"
                     label="Male"
                     inline
                   />
                   <MDBRadio
-                    className="mx-3"
-                    name="inlineRadio"
-                    id="inlineRadio1"
+                    style={{ marginLeft: 10 + "px" }}
+                    name="gender"
                     value="Female"
+                    onChange={onChange}
+                    id="inlineRadio1"
                     label="Female"
                     inline
                   />
@@ -73,19 +153,50 @@ const EditEmployeeProfile = () => {
 
                 <MDBCol>
                   <MDBInput
-                    id="checkIn"
+                    id="dop"
                     type="date"
-                    name="checkIn"
+                    name="birthday"
+                    value={birthday}
                     label="Date of Birth"
+                    onChange={onChange}
                   />
                 </MDBCol>
               </MDBRow>
-               <MDBRow className="mb-3 ">
+              <MDBRow className="mb-3 ">
                 <MDBCol>
-                  <select className="form-control">
+                  <MDBInput
+                    name="email"
+                    type="email"
+                    value={email}
+                    onChange={onChange}
+                    id="emailAddress"
+                    label="Email Address"
+                  />
+                </MDBCol>
+
+                <MDBCol>
+                  <MDBInput
+                    name="contactNumber"
+                    type="tel"
+                    value={contactNumber}
+                    onChange={onChange}
+                    label="Contact Number"
+                  />
+                </MDBCol>
+              </MDBRow>
+
+              <MDBRow className="mb-3 ">
+                <MDBCol>
+                  <select
+                    name="city"
+                    className="form-control"
+                    value={city}
+                    onChange={onChange}
+                  >
                     <option value="" disabled selected>
                       Select The City
                     </option>
+
                     <option value="Ahmed Nager Chatha">
                       Ahmed Nager Chatha
                     </option>
@@ -334,28 +445,17 @@ const EditEmployeeProfile = () => {
                 </MDBCol>
 
                 <MDBCol>
-                  <MDBInput type="email" id="firstname" label="Email Address" />
-                </MDBCol>
-              </MDBRow>
-
-               <MDBRow className="mb-3 ">
-                <MDBCol>
-                  <MDBInput type="tel" label="Phone Number" />
-                </MDBCol>
-
-                <MDBCol>
-                  <MDBInput type="password" id="firstname" label="Password" />
-                </MDBCol>
-              </MDBRow>
-               <MDBRow className="mb-3 ">
-                <MDBCol>
                   <MDBInput
+                    id="password"
+                    name="password"
+                    label="Password"
                     type="password"
-                    id="firstname"
-                    label="Re-Type Password"
+                    value={password}
+                    onChange={onChange}
                   />
                 </MDBCol>
               </MDBRow>
+
               <MDBTypography
                 tag="h6"
                 className="mb-3 text-uppercase bg-light p-2 rounded"
@@ -366,30 +466,28 @@ const EditEmployeeProfile = () => {
 
               <MDBRow className="mb-3 ">
                 <MDBCol>
-                  <label for="social-lin">Linkedin</label>
+                  <label htmlFor="social-lin">Linkedin</label>
                   <MDBInputGroup
                     noWrap
                     textBefore={<MDBIcon fab icon="linkedin" />}
                   >
                     <input
-                      type="text"
+                      name="social"
                       className="form-control"
-                      id="social-sky"
-                      placeholder="URL"
+                      id="social"
+                      value={social}
+                      onChange={onChange}
                     />
                   </MDBInputGroup>
                 </MDBCol>
               </MDBRow>
 
               <MDBCol>
-                <MDBBtn
-                  tag={Link}
-                  to="/employee/home"
-                  color="primary"
-                  type="submit"
-                >
+                <button className="btn btn-primary mb-4" type="button" onClick={(e) => {
+                    onSubmit(e);
+                  }}>
                   Save
-                </MDBBtn>
+                </button>
               </MDBCol>
             </form>
           </div>

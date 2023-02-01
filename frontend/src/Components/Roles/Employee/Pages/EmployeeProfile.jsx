@@ -43,7 +43,7 @@ const EmployeeProfile = () => {
     isUserAuth();
     response();
   }, []);
-  console.log();
+  console.log(data);
 
   return (
     <EmployeeSidebar>
