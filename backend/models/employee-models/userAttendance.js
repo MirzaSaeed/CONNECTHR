@@ -10,18 +10,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Please add a Name"],
   },
-  date: {
-    checkIn: {
-      type: Date,
-      required: true,
-      trim: true,
-    },
-    checkOut: {
-      type: Date,
-      required: true,
-      trim: true,
-    },
-  },
+ 
 });
 
 module.exports = mongoose.model("employeesAttendance", userSchema);
