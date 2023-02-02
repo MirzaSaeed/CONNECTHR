@@ -191,7 +191,6 @@ const updateEmployee = asyncHandler(async (req, res) => {
 
 // * DELETE Request
 // * Delete / auth/employee/register
-
 const deleteEmployee = asyncHandler(async (req, res) => {
   const employee = await userModel.findById(req.params.id);
   if (!employee) {
@@ -212,6 +211,7 @@ const deleteEmployee = asyncHandler(async (req, res) => {
   employee.remove();
   res.status(200).json({ id: req.params.id });
 });
+
 
 // * Generate JWT
 const generateToken = (id) => {

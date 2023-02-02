@@ -42,6 +42,20 @@ const userSchema = new Schema({
     required: [true, "Please add a salary"],
   },
   social: { type: String },
+  date: {
+    type: Date,
+    required: true,
+  },
+  checkIn: {
+    type: Date,
+    required: true,
+    trim: true,
+  },
+  checkOut: {
+    type: Date,
+    required: true,
+    trim: true,
+  },
 });
 
 module.exports = mongoose.model("employeeAuths", userSchema);
