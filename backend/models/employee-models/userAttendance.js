@@ -3,14 +3,23 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "adminAuths",
   },
-  employeeName: {
-    type: String,
-    required: [true, "Please add a Name"],
+  employee: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "employeeAuths",
   },
- 
+  date: {
+    type: Date,
+  },
+  checkIn: {
+    type: Date,
+    trim: true,
+  },
+  checkOut: {
+    type: Date,
+    trim: true,
+  },
 });
 
 module.exports = mongoose.model("employeesAttendance", userSchema);

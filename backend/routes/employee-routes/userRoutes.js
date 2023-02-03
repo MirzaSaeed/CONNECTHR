@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  markAttendance,
+  markCheckInAttendance,markCheckOutAttendance,
   getCheckInAttendance,
   getCheckOutAttendance,
 } = require("../../controllers/employee-controllers/userAttendance");
@@ -28,7 +28,8 @@ router.post("/employee/login", loginUser);
 router.get("/employee/me", employeeProtect, loggedInuser);
 
 // ? Attendance Routes
-router.post("/employee/attendance/", markAttendance);
+router.post("/employee/attendance/checkIn",employeeProtect, markCheckInAttendance);
+router.post("/employee/attendance/checkOut",employeeProtect, markCheckOutAttendance);
 router.get("/employee/attendance/checkIn", getCheckInAttendance);
 router.get("/employee/attendance/checkOut", getCheckOutAttendance);
 
