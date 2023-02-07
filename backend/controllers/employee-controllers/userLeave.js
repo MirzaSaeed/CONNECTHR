@@ -13,23 +13,24 @@ const applyLeave = asyncHandler(async (req, res) => {
     const { from, to, reason, type, status } = req.body;
     if (!(from || to || reason || type)) {
       res.status(400).json("ERROR! Please add Leave Reasoning Details");
-    }
-    const applied = await leaveModel.create({
-      from,
-      to,
-      reason,
-      type,
-      status: "pending",
-      employee: req.user.id,
-    });
-    if (applied) {
-      res.status(201).json({
+    } else {
+      const applied = await leaveModel.create({
         from,
         to,
-        status,
         reason,
         type,
+        status: "pending",
+        employee: req.user.id,
       });
+      if (applied) {
+        res.status(201).json({
+          from,
+          to,
+          status,
+          reason,
+          type,
+        });
+      }
     }
   }
 });

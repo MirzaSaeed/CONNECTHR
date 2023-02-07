@@ -29,10 +29,7 @@ const EmployeeAttendance = () => {
       navigate("*");
     }
   };
-  useEffect(() => {
-    isUserAuth();
-    response();
-  }, []);
+  
   const [checkInData, setCheckInData] = useState({
     checkIn: "",
   });
@@ -96,6 +93,10 @@ const EmployeeAttendance = () => {
       });
     }
   };
+  useEffect(() => {
+    isUserAuth();
+    response();
+  }, [formData]);
   return (
     <EmployeeSidebar>
       <Loading>

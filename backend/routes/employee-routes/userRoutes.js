@@ -35,7 +35,7 @@ router.get("/employee/attendance/checkIn",employeeProtect, getCheckInAttendance)
 router.get("/employee/attendance/checkOut",employeeProtect ,getCheckOutAttendance);
 
 // ? leave Routes
-router.post("/employee/leave/apply",employeeProtect, applyLeave);
+router.post("/employee/leaves/apply",employeeProtect, applyLeave);
 router.get("/employee/leaves",employeeProtect, getLeavesList);
 
 module.exports = router;

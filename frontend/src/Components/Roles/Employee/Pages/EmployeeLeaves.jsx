@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   MDBCard,
   MDBCardBody,
@@ -9,12 +10,27 @@ import {
   MDBTableHead,
   MDBTextArea,
 } from "mdb-react-ui-kit";
-import React, { useState } from "react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
 
 const EmployeeLeaves = () => {
+  const navigate = useNavigate();
+  let user = JSON.parse(localStorage.getItem("user"));
+  const isUserAuth = async () => {
+    const res = await axios
+      .get("http://localhost:9000/auth/employee/me/", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (res.status === 401) {
+      navigate("*");
+    }
+  };
+
   const [data, setData] = useState({
     from: "",
     to: "",
@@ -22,8 +38,22 @@ const EmployeeLeaves = () => {
     type: "",
   });
   const { from, to, reason, type } = data;
-  const onsubmit = (e) => {
-    
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    // ! Fetch API data PUT method
+    let response = await axios
+      .post(`/auth/employee/leaves/apply/`, data, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (response) {
+      alert("Leave Request Submitted");
+      navigate("/auth/employee/leaves");
+      setData({
+        checkIn: "",
+      });
+    }
   };
   const onChange = (e) => {
     setData((prevState) => ({
@@ -31,6 +61,20 @@ const EmployeeLeaves = () => {
       [e.target.name]: e.target.value, //? for key used: name and for value used: value
     }));
   };
+  const [formData, setFormData] = useState([{}]);
+
+  // ! GET Leaves
+  let response = async () => {
+    await axios
+      .get(`/auth/employee/leaves/`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => setFormData(res.data));
+  };
+  useEffect(() => {
+    isUserAuth();
+    response();
+  }, [formData]);
   return (
     <EmployeeSidebar>
       <Loading>
@@ -100,11 +144,12 @@ const EmployeeLeaves = () => {
                                   onChange={onChange}
                                 />
                                 <select
+                                  name="type"
                                   className="form-control"
                                   value={type}
                                   onChange={onChange}
                                 >
-                                  <option defaultValue="" selected>
+                                  <option value="DEFAULT" selected>
                                     Select Leave Type
                                   </option>
                                   <option value="Annual Leave">
@@ -155,7 +200,7 @@ const EmployeeLeaves = () => {
                               <button
                                 type="button"
                                 className="btn btn-primary"
-                                onClick={(e) => onsubmit(e)}
+                                onClick={(e) => onSubmit(e)}
                               >
                                 Submit
                               </button>
@@ -170,15 +215,30 @@ const EmployeeLeaves = () => {
                 <MDBTable striped hover className="shadow-4">
                   <MDBTableHead className="table-light text-primary">
                     <tr>
-                      <th scope="col">Date</th>
                       <th scope="col">Leave Type</th>
+                      <th scope="col">From</th>
+                      <th scope="col">To</th>
+                      <th scope="col">Reason</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                    <tr>
-                      <th scope="row">Calender</th>
-                      <td>Type of Leave</td>
-                    </tr>
+                    {formData &&
+                      formData.map((data) => (
+                        <tr>
+                          <th scope="row">{data.type}</th>
+                          <td>{moment.utc(data.from).format("D MMM, YYYY")}</td>
+                          <td>{moment.utc(data.to).format("D MMM, YYYY")}</td>
+                          <td>{data.reason}</td>
+                          {data.status === "pending" ? (
+                            <th className="text-danger">{data.status}</th>
+                          ) : data.status === "approved" ? (
+                            <th color="text-success">{data.status}</th>
+                          ) : (
+                            <th color="text-warning">{data.status}</th>
+                          )}
+                        </tr>
+                      ))}
                   </MDBTableBody>
                 </MDBTable>
               </MDBCardBody>
