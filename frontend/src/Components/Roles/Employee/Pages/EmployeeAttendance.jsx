@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   MDBCard,
   MDBCardBody,
@@ -8,12 +9,88 @@ import {
   MDBTableBody,
   MDBTableHead,
 } from "mdb-react-ui-kit";
-import React from "react";
+import moment from "moment";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
 
 const EmployeeAttendance = () => {
+  const navigate = useNavigate();
+  let user = JSON.parse(localStorage.getItem("user"));
+  const isUserAuth = async () => {
+    const res = await axios
+      .get("http://localhost:9000/auth/employee/me/", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (res.status === 401) {
+      navigate("*");
+    }
+  };
+  useEffect(() => {
+    isUserAuth();
+    response();
+  }, []);
+  const [checkInData, setCheckInData] = useState({
+    checkIn: "",
+    checkOut: "",
+  });
+  const { checkIn, checkOut } = checkInData;
+
+  const onChange = (e) => {
+    setCheckInData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value, //? for key used: name and for value used: value
+    }));
+  };
+  console.log(checkInData);
+  const markCheckIn = async (e) => {
+    e.preventDefault();
+    // ! Fetch API data PUT method
+    let response = await axios
+      .post(`/auth/employee/attendance/checkIn/`, checkInData, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (response) {
+      alert("Attendance Marked");
+      navigate("/auth/employee/attendance");
+      setCheckInData({
+        checkIn: "",
+        checkOut: "",
+      });
+    }
+  };
+  const [checkInFormData, setCheckInFormData] = useState([{}]);
+
+  // ! GET attendance
+  const response = async () => {
+    await axios
+      .get("http://localhost:9000/auth/employee/attendance/checkIn/", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => setCheckInFormData(res.data));
+    
+  };
+  const markCheckOut = async (e) => {
+    e.preventDefault();
+    // ! Fetch API data PUT method
+    let response = await axios
+      .post(`/auth/employee/attendance/checkOut/`, checkInData, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    if (response) {
+      alert("Attendance Marked");
+      navigate("/auth/employee/attendance");
+      setCheckInData({
+        checkIn: "",
+        checkOut: "",
+      });
+    }
+  };
   return (
     <EmployeeSidebar>
       <Loading>
@@ -84,6 +161,8 @@ const EmployeeAttendance = () => {
                                 id="checkIn"
                                 type="datetime-local"
                                 name="checkIn"
+                                onChange={onChange}
+                                value={checkIn}
                               />
                             </div>
                           </MDBRow>
@@ -95,7 +174,11 @@ const EmployeeAttendance = () => {
                             >
                               Close
                             </button>
-                            <button type="button" className="btn btn-primary">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={(e) => markCheckIn(e)}
+                            >
                               Mark Attendance
                             </button>
                           </div>
@@ -132,7 +215,9 @@ const EmployeeAttendance = () => {
                               <MDBInput
                                 id="checkIn"
                                 type="datetime-local"
-                                name="checkIn"
+                                name="checkOut"
+                                onChange={onChange}
+                                value={checkOut}
                               />
                             </div>
                           </MDBRow>
@@ -144,7 +229,11 @@ const EmployeeAttendance = () => {
                             >
                               Close
                             </button>
-                            <button type="button" className="btn btn-primary">
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={(e) => markCheckOut(e)}
+                            >
                               Mark Attendance
                             </button>
                           </div>
@@ -164,11 +253,24 @@ const EmployeeAttendance = () => {
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                    <tr>
-                      <th scope="row">Calender</th>
-                      <td>Time Unit</td>
-                      <td>Time Unit</td>
-                    </tr>
+                    {checkInFormData && checkInFormData.map((dateTime) => {
+                      <tr>
+                        <th scope="row">
+                          {moment.utc(dateTime.checkIn)
+                                .format("MMM D, YYYY")}
+                        </th>
+                        <td>
+                          {moment
+                            .utc(dateTime.checkIn)
+                            .format("HH:mm A")}
+                        </td>
+                        <td>
+                          {moment
+                            .utc(dateTime.checkOut)
+                            .format("HH:mm A")}
+                        </td>
+                      </tr>;
+                    })}
                   </MDBTableBody>
                 </MDBTable>
               </MDBCardBody>

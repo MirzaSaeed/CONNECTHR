@@ -6,7 +6,6 @@ const userSchema = new Schema({
     required: true,
     ref: "employeeAuths",
   },
-  
   checkIn: {
     type: Date,
     trim: true,

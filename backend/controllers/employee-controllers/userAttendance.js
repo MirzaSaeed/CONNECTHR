@@ -29,7 +29,7 @@ const markCheckInAttendance = asyncHandler(async (req, res) => {
 // * GET Request
 // * Get /auth/employee/attendance/checkIn
 const getCheckInAttendance = asyncHandler(async (req, res) => {
-  const attendance = await attendanceModel.find({ employee: req.user});
+  const attendance = await attendanceModel.find({ employee: req.user.id});
   res.status(200).json(attendance);
 });
 
@@ -60,7 +60,7 @@ const markCheckOutAttendance = asyncHandler(async (req, res) => {
 // * GET Request
 // * Get /auth/employee/attendance/checkOut
 const getCheckOutAttendance = asyncHandler(async (req, res) => {
-  const attendance = await attendanceModel.find({ employee: req.user});
+  const attendance = await attendanceModel.find({ employee: req.user.id});
   res.status(200).json(attendance);
 });
 module.exports = {
