@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const userSchema = new Schema({
+const attendanceSchema = new Schema({
   employee: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -12,8 +12,7 @@ const userSchema = new Schema({
   },
   checkOut: {
     type: Date,
-    trim: true,
   },
 });
 
-module.exports = mongoose.model("employeesAttendance", userSchema);
+module.exports = mongoose.model("employeesAttendance", attendanceSchema);

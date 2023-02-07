@@ -35,17 +35,25 @@ const EmployeeAttendance = () => {
   }, []);
   const [checkInData, setCheckInData] = useState({
     checkIn: "",
+  });
+  const [checkOutData, setCheckOutData] = useState({
     checkOut: "",
   });
-  const { checkIn, checkOut } = checkInData;
+  const { date, checkIn } = checkInData;
+  const {  checkOut } = checkOutData;
 
-  const onChange = (e) => {
+  const onCheckIn = (e) => {
     setCheckInData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value, //? for key used: name and for value used: value
     }));
   };
-  console.log(checkInData);
+  const onCheckOut = (e) => {
+    setCheckOutData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value, //? for key used: name and for value used: value
+    }));
+  };
   const markCheckIn = async (e) => {
     e.preventDefault();
     // ! Fetch API data PUT method
@@ -59,11 +67,10 @@ const EmployeeAttendance = () => {
       navigate("/auth/employee/attendance");
       setCheckInData({
         checkIn: "",
-        checkOut: "",
       });
     }
   };
-  const [checkInFormData, setCheckInFormData] = useState([{}]);
+  const [formData, setFormData] = useState([{}]);
 
   // ! GET attendance
   const response = async () => {
@@ -71,22 +78,20 @@ const EmployeeAttendance = () => {
       .get("http://localhost:9000/auth/employee/attendance/checkIn/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .then((res) => setCheckInFormData(res.data));
-    
+      .then((res) => setFormData(res.data));
   };
   const markCheckOut = async (e) => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/employee/attendance/checkOut/`, checkInData, {
+      .post(`/auth/employee/attendance/checkOut/`, checkOutData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       alert("Attendance Marked");
       navigate("/auth/employee/attendance");
-      setCheckInData({
-        checkIn: "",
+      setCheckOutData({
         checkOut: "",
       });
     }
@@ -152,16 +157,27 @@ const EmployeeAttendance = () => {
                           </div>
                           <MDBRow className=" modal-body">
                             <div className="col-md-12 col-lg-4 my-3">
-                              <label htmlFor="checkIn">
-                                Select Date & Time
-                              </label>
+                              <label htmlFor="checkIn">Select Date</label>
+                            </div>
+                            <div className="col-md-12 col-lg-8 my-2">
+                              <MDBInput
+                                className="col-lg-4"
+                                id="checkIn"
+                                type="date"
+                                name="date"
+                                onChange={onCheckIn}
+                                value={date}
+                              />
+                            </div>
+                            <div className="col-md-12 col-lg-4 my-3">
+                              <label htmlFor="checkIn">Select Time</label>
                             </div>
                             <div className="col-md-12 col-lg-8 my-2">
                               <MDBInput
                                 id="checkIn"
-                                type="datetime-local"
+                                type="time"
                                 name="checkIn"
-                                onChange={onChange}
+                                onChange={onCheckIn}
                                 value={checkIn}
                               />
                             </div>
@@ -213,10 +229,10 @@ const EmployeeAttendance = () => {
                             </div>
                             <div className="col-md-12 col-lg-8 my-2">
                               <MDBInput
-                                id="checkIn"
+                                id="checkOut"
                                 type="datetime-local"
                                 name="checkOut"
-                                onChange={onChange}
+                                onChange={onCheckOut}
                                 value={checkOut}
                               />
                             </div>
@@ -253,24 +269,24 @@ const EmployeeAttendance = () => {
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                    {checkInFormData && checkInFormData.map((dateTime) => {
-                      <tr>
-                        <th scope="row">
-                          {moment.utc(dateTime.checkIn)
-                                .format("MMM D, YYYY")}
-                        </th>
-                        <td>
-                          {moment
-                            .utc(dateTime.checkIn)
-                            .format("HH:mm A")}
-                        </td>
-                        <td>
-                          {moment
-                            .utc(dateTime.checkOut)
-                            .format("HH:mm A")}
-                        </td>
-                      </tr>;
-                    })}
+                    {formData &&
+                      formData.map((data) => (
+                        <tr>
+                          <th scope="row">
+                            {moment.utc(data.checkIn).format("MMM D, YYYY")}
+                          </th>
+                          <td>
+                            {!data.checkIn
+                              ? null
+                              : moment.utc(data.checkIn).format("LT")}
+                          </td>
+                          <td>
+                            {!data.checkOut
+                              ? null
+                              : moment.utc(data.checkOut).format("LT")}
+                          </td>
+                        </tr>
+                      ))}
                   </MDBTableBody>
                 </MDBTable>
               </MDBCardBody>

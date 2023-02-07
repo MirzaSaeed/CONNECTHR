@@ -2,18 +2,35 @@ import {
   MDBCard,
   MDBCardBody,
   MDBContainer,
+  MDBInput,
   MDBRow,
   MDBTable,
   MDBTableBody,
   MDBTableHead,
   MDBTextArea,
 } from "mdb-react-ui-kit";
-import React from "react";
+import React, { useState } from "react";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
 
 const EmployeeLeaves = () => {
+  const [data, setData] = useState({
+    from: "",
+    to: "",
+    reason: "",
+    type: "",
+  });
+  const { from, to, reason, type } = data;
+  const onsubmit = (e) => {
+    
+  };
+  const onChange = (e) => {
+    setData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value, //? for key used: name and for value used: value
+    }));
+  };
   return (
     <EmployeeSidebar>
       <Loading>
@@ -64,8 +81,30 @@ const EmployeeLeaves = () => {
                             </div>
                             <div className="modal-body">
                               <form>
-                                <select className="form-control">
-                                  <option defaultValue="" disabled select>
+                                <MDBInput
+                                  className="mb-3"
+                                  id="from"
+                                  type="date"
+                                  name="from"
+                                  value={from}
+                                  label="from"
+                                  onChange={onChange}
+                                />
+                                <MDBInput
+                                  className="mb-3"
+                                  id="to"
+                                  type="date"
+                                  name="to"
+                                  value={to}
+                                  label="to"
+                                  onChange={onChange}
+                                />
+                                <select
+                                  className="form-control"
+                                  value={type}
+                                  onChange={onChange}
+                                >
+                                  <option defaultValue="" selected>
                                     Select Leave Type
                                   </option>
                                   <option value="Annual Leave">
@@ -98,6 +137,9 @@ const EmployeeLeaves = () => {
                                   className="md-4 mt-3"
                                   label="Reason"
                                   id="textAreaExample"
+                                  name="reason"
+                                  value={reason}
+                                  onChange={onChange}
                                   rows={4}
                                 />
                               </form>
@@ -110,7 +152,11 @@ const EmployeeLeaves = () => {
                               >
                                 Close
                               </button>
-                              <button type="button" className="btn btn-primary">
+                              <button
+                                type="button"
+                                className="btn btn-primary"
+                                onClick={(e) => onsubmit(e)}
+                              >
                                 Submit
                               </button>
                             </div>

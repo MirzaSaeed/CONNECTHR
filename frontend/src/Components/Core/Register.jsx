@@ -264,7 +264,7 @@ const Register = () => {
                     value={city}
                     onChange={onChange}
                   >
-                    <option value="DEFAULT" selected>
+                    <option value="DEFAULT" disabled selected>
                       Select The City
                     </option>
                     <option value="Islamabad">Islamabad</option>

@@ -14,6 +14,7 @@ const {
   deleteEmployee,
   updateEmployee,
 } = require("../../controllers/employee-controllers/userController");
+const { applyLeave, getLeavesList } = require("../../controllers/employee-controllers/userLeave");
 const {
   adminProtect,
   employeeProtect,
@@ -30,7 +31,11 @@ router.get("/employee/me", employeeProtect, loggedInuser);
 // ? Attendance Routes
 router.post("/employee/attendance/checkIn",employeeProtect, markCheckInAttendance);
 router.post("/employee/attendance/checkOut",employeeProtect, markCheckOutAttendance);
-router.get("/employee/attendance/checkIn", getCheckInAttendance);
-router.get("/employee/attendance/checkOut", getCheckOutAttendance);
+router.get("/employee/attendance/checkIn",employeeProtect, getCheckInAttendance);
+router.get("/employee/attendance/checkOut",employeeProtect ,getCheckOutAttendance);
+
+// ? leave Routes
+router.post("/employee/leave/apply",employeeProtect, applyLeave);
+router.get("/employee/leaves",employeeProtect, getLeavesList);
 
 module.exports = router;
