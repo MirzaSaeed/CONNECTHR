@@ -15,18 +15,22 @@ const markCheckInAttendance = asyncHandler(async (req, res) => {
       res.status(400).json("ERROR! Please add Attendace Date & Time");
     }
     const mark = await attendanceModel.create({
-      date,
       checkIn,
       employee: req.user.id,
-      name: req.user.firstName,
     });
     if (mark) {
       res.status(201).json({
-        date: date,
         checkIn,
       });
     }
   }
+});
+
+// * GET Request
+// * Get /auth/employee/attendance/checkIn
+const getCheckInAttendance = asyncHandler(async (req, res) => {
+  const attendance = await attendanceModel.find({ employee: req.user});
+  res.status(200).json(attendance);
 });
 
 // * POST Request
@@ -41,33 +45,23 @@ const markCheckOutAttendance = asyncHandler(async (req, res) => {
       res.status(400).json("ERROR! Please add Attendace Date & Time");
     }
     const mark = await attendanceModel.create({
-      date,
       checkOut,
       employee: req.user.id,
-      name: req.user.firstName,
     });
     if (mark) {
       res.status(201).json({
-        date: date,
         checkOut,
       });
     }
   }
   res.json({ message: "Attendance Marking" });
 });
-// * GET Request
-// * Get /auth/employee/attendance/checkIn
-const getCheckInAttendance = asyncHandler(async (req, res) => {
-  const getAttendance = await attendanceModel.find({
-    employee: req.user.id,
-  });
-  res.status(201).json(getAttendance);
-});
 
 // * GET Request
-// * Get /auth/employee/attendance/checkIn
+// * Get /auth/employee/attendance/checkOut
 const getCheckOutAttendance = asyncHandler(async (req, res) => {
-  res.json({ message: "CheckOut Attendance" });
+  const attendance = await attendanceModel.find({ employee: req.user});
+  res.status(200).json(attendance);
 });
 module.exports = {
   markCheckInAttendance,
