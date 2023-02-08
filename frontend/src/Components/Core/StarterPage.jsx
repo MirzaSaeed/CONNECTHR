@@ -22,17 +22,25 @@ const StarterPage = () => {
   let token = JSON.parse(localStorage.getItem("user"));
   const [basicActive, setBasicActive] = useState("admin");
   const isUserAuth = async () => {
-    const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
-        headers: { Authorization: `Bearer ${token.token}` },
-      })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+    const res = await axios.get("http://localhost:9000/auth/admin/me/", {
+      headers: { Authorization: `Bearer ${token.token}` },
+    });
     if (res.status === 200) {
       navigate("/auth/admin/home");
     }
   };
+  const employeeRES = async () => {
+    const res = await axios.get("http://localhost:9000/auth/employee/me/", {
+      headers: { Authorization: `Bearer ${token.token}` },
+    });
+    if (res.status === 200) {
+      navigate("/auth/employee/home");
+    }
+  };
+
   useEffect(() => {
     isUserAuth();
+    employeeRES();
   }, []);
   const handleBasicClick = (value) => {
     if (value === basicActive) {

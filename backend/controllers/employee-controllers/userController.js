@@ -133,6 +133,7 @@ const loggedInuser = asyncHandler(async (req, res) => {
     city,
     zipcode,
     social,
+
   } = await userModel.findById(req.user.id);
   res.status(200).json({
     id: _id,
