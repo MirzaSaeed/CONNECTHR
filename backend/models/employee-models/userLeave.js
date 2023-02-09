@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 const leaveSchema = new Schema({
-  employee: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "employeeAuths",
-  },
   status: {
     type: String,
     enum: ["pending", "approved", "denied"],
@@ -28,9 +23,17 @@ const leaveSchema = new Schema({
   reason: {
     type: String,
   },
-  type:{
+  type: {
     type: String,
-  }
+  },
+  name: {
+    type: String,
+  },
+  employee: {
+    type: Schema.Types.ObjectId,
+    required: true,
+    ref: "employeeAuths",
+  },
 });
 
 module.exports = mongoose.model("employeeLeave", leaveSchema);

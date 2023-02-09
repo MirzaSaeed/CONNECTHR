@@ -7,10 +7,11 @@ const employeeModel = require("../../models/employee-models/userModel");
 // * Post /auth/employee/leave/apply
 const applyLeave = asyncHandler(async (req, res) => {
   const user = await employeeModel.findById(req.user.id);
+  const nam = `${user.firstName} ${user.lastName}`;
   if (!user) {
     res.status(400).json({ message: "User Not Found" });
   } else {
-    const { from, to, reason, type, status } = req.body;
+    const { from, to, reason, type, status, name } = req.body;
     if (!(from || to || reason || type)) {
       res.status(400).json("ERROR! Please add Leave Reasoning Details");
     } else {
@@ -21,15 +22,14 @@ const applyLeave = asyncHandler(async (req, res) => {
         type,
         status: "pending",
         employee: req.user.id,
+        name: nam,
       });
       if (applied) {
-        res.status(201).json({
-          from,
-          to,
-          status,
-          reason,
-          type,
-        });
+        user.populate("leaves");
+        user.leaves.push(applied);
+        res.status(201).send({ from, to, reason, type, status: "pending",
+        employee: req.user.id,
+        name: nam, });
       }
     }
   }

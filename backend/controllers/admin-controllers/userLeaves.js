@@ -9,7 +9,7 @@ const getLeavesList = asyncHandler(async (req, res) => {
   if (isAdmin) {
     const isEmployees = await employeeModel.find({ admin: req.user.id });
     if (isEmployees) {
-      const leaves = await leaveModel.find({employee: req.user});
+      const leaves = await leaveModel.find();
       res.send(leaves);
     }
   }
