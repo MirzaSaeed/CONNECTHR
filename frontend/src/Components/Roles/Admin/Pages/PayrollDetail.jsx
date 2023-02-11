@@ -5,6 +5,7 @@ import AdminSidebar from "../../../Core/AdminSidebar";
 import {
   MDBCard,
   MDBCardBody,
+  MDBCardHeader,
   MDBContainer,
   MDBRow,
   MDBTable,
@@ -15,12 +16,12 @@ import Admin from "../../../Core/Admin";
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-const AdminPayroll = () => {
+const PayrollDetail = () => {
   const navigate = useNavigate();
+  const emp = JSON.parse(localStorage.getItem("Uid"));
+  const [data, setData] = useState([{}]);
+
   let user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    navigate("*");
-  }
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/admin/me/", {
@@ -31,30 +32,37 @@ const AdminPayroll = () => {
       navigate("*");
     }
   };
-
-  // ! GET Leaves
-  const [formData, setFormData] = useState([{}]);
-  let response = async () => {
+  const response = async () => {
+    console.log(emp[0])
     await axios
-      .get(`/auth/employee/register/`, {
+      .get(`http://localhost:9000/auth/employee/payroll/${emp[0]}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .then((res) => setFormData(res.data));
+      .then((res) => setData(res.data));
   };
 
-  const userDetail = async (e, Uid, fname, lname) => {
-    localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
+  const updatePayroll = async (e, pid) => {
+    console.log(pid);
     e.preventDefault();
-    await axios
-      .get(`http://localhost:9000/auth/employee/register/${Uid}`, {
+    await axios.put(
+      `/auth/employee/payroll/update?eid=${emp[0]}&pid=${pid}`,
+      null,
+      {
         headers: { Authorization: `Bearer ${user.token}` },
-      })
-      .then(navigate(generatePath(`/auth/admin/payroll/${Uid}`)));
+      }
+    );
   };
+
+  const getUserID = async (e) => {
+      e.preventDefault();
+     navigate(generatePath(`/auth/admin/payroll/add/${emp[0]}`));
+    };
   useEffect(() => {
     isUserAuth();
-    response();
   }, []);
+  useEffect(()=>{
+response();
+  },[data])
   return (
     <AdminSidebar>
       <Loading>
@@ -62,6 +70,19 @@ const AdminPayroll = () => {
         <MDBContainer fluid className="fadeIn">
           <MDBRow className="mx-2">
             <MDBCard>
+              <MDBCardHeader>
+                <Link to="/auth/admin/payroll/add">
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={(e) => {
+                      getUserID(e, data.id);
+                    }}
+                  >
+                    Add Payroll
+                  </button>
+                </Link>
+              </MDBCardHeader>
               <MDBCardBody className="text-center">
                 <MDBTable striped hover className="shadow-4">
                   <MDBTableHead className="table-light text-primary">
@@ -69,35 +90,42 @@ const AdminPayroll = () => {
                       <th scope="col">Date</th>
                       <th scope="col">Name</th>
                       <th scope="col">Salary</th>
-                      <th scope="col">Action</th>
+                      <th scope="col">Status & Actions</th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                    {formData &&
-                      formData.map((data) => (
+                    {data &&
+                      data.map((data) => (
                         <tr>
                           <th scope="row">
                             {moment.utc(data.month).format("D MMM, YYYY")}
                           </th>
                           <th>
-                            {data.firstName} {data.lastName}
+                            {data.name}
                           </th>
                           <th>{data.salary}</th>
-                          <th>
-                            <button
-                              className="btn btn-link"
-                              onClick={(e) => {
-                                userDetail(
-                                  e,
-                                  data._id,
-                                  data.firstName,
-                                  data.lastName
-                                );
-                              }}
-                            >
-                              View Detail
-                            </button>
-                          </th>
+
+                          {data.status === "pending" ? (
+                            <th className="">
+                              <button className="btn btn-link text-danger">
+                                {data.status}
+                              </button>
+                              <button
+                                className="btn btn-link"
+                                onClick={(e) => {
+                                  updatePayroll(e, data._id);
+                                }}
+                              >
+                                Update
+                              </button>
+                            </th>
+                          ) : data.status === "approved" ? (
+                            <th className="">
+                              <button className="btn btn-link text-success">
+                                Delivered
+                              </button>
+                            </th>
+                          ) : null}
                         </tr>
                       ))}
                   </MDBTableBody>
@@ -111,4 +139,4 @@ const AdminPayroll = () => {
   );
 };
 
-export default AdminPayroll;
+export default PayrollDetail;

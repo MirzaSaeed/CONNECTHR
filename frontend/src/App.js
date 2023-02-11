@@ -17,6 +17,8 @@ import Dashboard from "./Components/Roles/Admin/Pages/Dashboard";
 import Error from "./Components/Errors/Error";
 import AddEmployee from "./Components/Roles/Admin/Pages/AddEmployee";
 import EmployeeDetail from "./Components/Roles/Admin/Pages/EmployeeDetail";
+import AddPayrollDetail from "./Components/Roles/Admin/Pages/AddPayrollDetail";
+import PayrollDetail from "./Components/Roles/Admin/Pages/PayrollDetail";
 
 function App(props) {
   return (
@@ -40,8 +42,10 @@ function App(props) {
       <Route path="/auth/admin/payroll" element={<AdminPayroll />} />
       <Route path="/auth/admin/leaves" element={<AdminLeaves />} />
       <Route path="/auth/admin/addEmployee" element={<AddEmployee />} />
-      <Route path="*" element={<Error />} />
       <Route path="/auth/admin/:id" element={<EmployeeDetail />} />
+      <Route path="/auth/admin/payroll/add/:id" element={<AddPayrollDetail />} />
+      <Route path="/auth/admin/payroll/:id" element={<PayrollDetail />} />
+      <Route path="*" element={<Error />} />
 
     </Routes>
   );

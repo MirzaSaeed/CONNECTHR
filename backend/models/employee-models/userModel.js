@@ -35,10 +35,12 @@ const userSchema = new Schema({
     type: Number,
   },
   social: { type: String },
- leaves: [{
-  type: Schema.Types.ObjectId,
-  ref: "employeeLeave"
- }]
+  leaves: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "employeeLeave",
+    },
+  ],
 });
 
 module.exports = mongoose.model("employeeAuths", userSchema);

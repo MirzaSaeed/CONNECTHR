@@ -31,9 +31,7 @@ const EmployeeDetail = () => {
       navigate("*");
     }
   };
-  useEffect(()=>{
-    isUserAuth();
-  },[]);
+ 
   const response = async () => {
     console.log(`id is geting in res ${Uid}`);
     await axios
@@ -51,6 +49,8 @@ const EmployeeDetail = () => {
       .then(localStorage.removeItem("Uid"), navigate("/auth/admin/home"));
   };
   useEffect(() => {
+    isUserAuth();
+
     if (Uid) {
       response();
     }

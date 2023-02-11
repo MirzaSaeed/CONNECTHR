@@ -2,10 +2,6 @@ import axios from "axios";
 import {
   MDBCard,
   MDBCardBody,
-  MDBCardLink,
-  MDBCardSubTitle,
-  MDBCardText,
-  MDBCardTitle,
   MDBCol,
   MDBContainer,
   MDBRow,
@@ -108,7 +104,6 @@ const AdminLeaves = () => {
                               </th>
                             )}
 
-                            <th></th>
                           </tr>
                         ))}
                     </MDBTableBody>
