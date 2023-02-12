@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const adminModel = require("../../models/admin-models/userModel");
 const employeeModel = require("../../models/employee-models/userModel");
-const employeePayroll = require("../../models/employee-models/userPayroll");
+const employeePayroll = require("../../models/employee-models/payrollModel");
 
 const addPayroll = asyncHandler(async (req, res) => {
   const isAdmin = await adminModel.findById(req.user.id);

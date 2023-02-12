@@ -17,7 +17,7 @@ const {
   updatePayroll,
   getPayroll,
   getPayrollById,
-  updateSalary
+  updateSalary,
 } = require("../../controllers/admin-controllers/payrollController");
 const { adminProtect } = require("../../middleware/authMiddleware");
 const {
@@ -27,6 +27,7 @@ const {
   deleteEmployee,
   updateEmployee,
 } = require("../../controllers/employee-controllers/userController");
+const { getAttendance, markCheckOutAttendance, markCheckInAttendance, getEmployeeAttendanceById, markCheckInEmployeeAttendance, markCheckOutEmployeeAttendance } = require("../../controllers/admin-controllers/attendanceController");
 
 // ? Authentication
 router.post("/admin/login", loginUser);
@@ -40,6 +41,32 @@ router.get("/admin/register", adminProtect, getEmployees);
 router.get("/admin/register/:id", adminProtect, getEmployee);
 router.delete("/admin/register/:id", adminProtect, deleteEmployee);
 router.put("/admin/register/:id", adminProtect, updateInformation);
+
+// ? Attendance Routes
+router.post(
+  "/admin/attendance/checkIn",
+ adminProtect,
+  markCheckInAttendance
+);
+router.put(
+  "/admin/attendance/checkOut/:id",
+  adminProtect,
+  markCheckOutAttendance
+);
+router.get("/admin/attendance/",adminProtect, getAttendance);
+
+//? Employee Attendance 
+router.post(
+  "/admin/employeeAttendance/checkIn/:id",
+ adminProtect,
+  markCheckInEmployeeAttendance
+);
+router.get("/admin/employeeAttendance/:id", adminProtect, getEmployeeAttendanceById);
+router.put(
+  "/admin/employeeAttendance/checkOut",
+ adminProtect,
+  markCheckOutEmployeeAttendance
+);
 
 // ? leave Routes
 router.get("/admin/leaves", adminProtect, getLeavesList);

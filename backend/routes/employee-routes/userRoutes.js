@@ -2,8 +2,7 @@ const express = require("express");
 const {
   markCheckInAttendance,
   markCheckOutAttendance,
-  getCheckInAttendance,
-  getCheckOutAttendance,
+  getAttendance,
 } = require("../../controllers/employee-controllers/attendanceController");
 const router = express.Router();
 const {
@@ -26,7 +25,7 @@ router.post("/employee/login", loginUser);
 router.get("/employee/me", employeeProtect, loggedInuser);
 
 // ? Update Employee Information
-router.put("/employee/register/:id", employeeProtect, updateEmployee);
+router.put("/employee/register/", employeeProtect, updateEmployee);
 
 // ? Attendance Routes
 router.post(
@@ -34,21 +33,17 @@ router.post(
   employeeProtect,
   markCheckInAttendance
 );
-router.post(
-  "/employee/attendance/checkOut",
+router.put(
+  "/employee/attendance/checkOut/:id",
   employeeProtect,
   markCheckOutAttendance
 );
 router.get(
-  "/employee/attendance/checkIn",
+  "/employee/attendance/",
   employeeProtect,
-  getCheckInAttendance
+  getAttendance
 );
-router.get(
-  "/employee/attendance/checkOut",
-  employeeProtect,
-  getCheckOutAttendance
-);
+
 
 // ? leave Routes
 router.post("/employee/leaves/apply", employeeProtect, applyLeave);

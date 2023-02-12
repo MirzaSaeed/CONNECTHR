@@ -1,4 +1,7 @@
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { Loading } from "../../../Core/Loading";
+import "../../../../app.css";
+import AdminSidebar from "../../../Core/AdminSidebar";
 import {
   MDBCard,
   MDBCardBody,
@@ -9,21 +12,18 @@ import {
   MDBTable,
   MDBTableBody,
   MDBTableHead,
-  MDBTypography,
 } from "mdb-react-ui-kit";
-import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { generatePath, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
-import AdminSidebar from "../../../Core/AdminSidebar";
-import { Loading } from "../../../Core/Loading";
-
-const AdminAttendance = () => {
+import { generatePath, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import moment from "moment";
+const AttendanceDetail = () => {
   const navigate = useNavigate();
+  const emp = JSON.parse(localStorage.getItem("Uid"));
+  const id = emp[0];
+  const [data, setData] = useState([{}]);
+
   let user = JSON.parse(localStorage.getItem("user"));
-  if (!user) {
-    navigate("*");
-  }
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/admin/me/", {
@@ -34,6 +34,15 @@ const AdminAttendance = () => {
     if (res.status === 401) {
       navigate("*");
     }
+  };
+
+  // ? Get Employee attendance
+  const response = async () => {
+    await axios
+      .get(`http://localhost:9000/auth/admin/employeeAttendance/${emp[0]}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => setData(res.data));
   };
 
   const [checkInData, setCheckInData] = useState({
@@ -61,38 +70,31 @@ const AdminAttendance = () => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/admin/attendance/checkIn/`, checkInData, {
+      .post(`/auth/admin/employeeAttendance/checkIn/${id}`, checkInData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
-      navigate("/auth/admin/attendance");
       setCheckInData({
         checkIn: "",
       });
     }
   };
-  const [formData, setFormData] = useState([{}]);
 
-  // ! GET attendance
-  const response = async () => {
-    await axios
-      .get("http://localhost:9000/auth/admin/attendance/", {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-      .then((res) => setFormData(res.data));
-  };
   const markCheckOut = async (e) => {
     e.preventDefault();
     const checkOutId = localStorage.getItem("checkOutId");
     // ! Fetch API data PUT method
     let response = await axios
-      .put(`/auth/admin/attendance/checkOut/${checkOutId}`, checkOutData, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
+      .put(
+        `/auth/admin/employeeAttendance/checkOut?eid=${emp[0]}&aid=${checkOutId}`,
+        checkOutData,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
-      navigate("/auth/admin/attendance");
       setCheckOutData({
         checkOut: "",
       });
@@ -101,42 +103,26 @@ const AdminAttendance = () => {
   const getCheckOutID = (e, id) => {
     localStorage.setItem("checkOutId", id);
   };
-
-// ? get Emlployee List
-const [employee, setEmployee] = useState([{}])
-let getEmployee = async () => {
-  await axios
-    .get(`/auth/admin/register/`, {
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-    .then((res) => setEmployee(res.data));
-};
-
-  // ? Get Employee Id
-  const userDetail = async (e, Uid, fname, lname) => {
-    localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
-    e.preventDefault();
-    await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
-      .then(navigate(generatePath(`/auth/admin/employeeAttendance/${Uid}`)));
-  };
   useEffect(() => {
     isUserAuth();
     response();
-    getEmployee();
-  }, []);
-
+  }, [data]);
   return (
     <AdminSidebar>
       <Loading>
-        <Admin title="Attendance" />
+        <Admin title="Attendance Detail" />
         <MDBContainer fluid className="fadeIn">
           <MDBRow className="mx-2">
             <MDBCard className="mx-auto ">
-              <MDBCardHeader>
-                <div className="career-form bg-light col-lg-5  px-4   shadow-4 text-center">
+              <span className="mt-2 mx-3">
+                <Link role={"button"} color="primary" to="/auth/admin/attendance">
+                  Back
+                </Link>
+              </span>
+              <MDBCardBody className="career-search text-center mb-60">
+                <div
+                  className="career-form mb-60 bg-light col-lg-5 mb-4 px-4   shadow-4"
+                >
                   <MDBRow className=" d-flex ">
                     <div
                       className="col-md-6 col-lg-6 my-3 text-dark "
@@ -266,98 +252,45 @@ let getEmployee = async () => {
                     </div>
                   </MDBRow>
                 </div>
-                <MDBRow>
-                  <MDBTypography
-                    tag="h6"
-                    className="mt-3 mb-2 text-left"
-                    color="primary"
-                  >
-                    My Attendance
-                  </MDBTypography>
-                  <MDBTable striped hover className="text-center shadow-4">
-                    <MDBTableHead className="table-light text-primary">
-                      <tr>
-                        <th scope="col">Date</th>
 
-                        <th scope="col">Check In</th>
-                        <th scope="col">Check Out</th>
-                      </tr>
-                    </MDBTableHead>
-                    <MDBTableBody className="table-group-divider table-divider-color">
-                      {formData &&
-                        formData.map((data) => (
-                          <tr>
-                            <th scope="row">
-                              {moment.utc(data.checkIn).format("MMM D, YYYY")}
-                            </th>
-                            <td>
-                              {!data.checkIn
-                                ? null
-                                : moment(data.checkIn).format("LT")}
-                            </td>
-                            <td>
-                              {!data.checkOut ? (
-                                <button
-                                  type="button"
-                                  className="btn btn-link"
-                                  data-mdb-toggle="modal"
-                                  data-mdb-target="#exampleModal2"
-                                  onClick={(e) => {
-                                    getCheckOutID(e, data._id);
-                                  }}
-                                >
-                                  Check Out
-                                </button>
-                              ) : (
-                                moment(data.checkOut).format("LT")
-                              )}
-                            </td>
-                          </tr>
-                        ))}
-                    </MDBTableBody>
-                  </MDBTable>
-                </MDBRow>
-              </MDBCardHeader>
-
-              <MDBCardBody className=" career-search mb-60">
-                <MDBTypography
-                  tag="h6"
-                  className=" mb-2 text-left"
-                  color="primary"
-                >
-                  Employees Attendance
-                </MDBTypography>
-                <MDBTable striped hover className="text-center shadow-4">
+                <MDBTable striped hover className="shadow-4">
                   <MDBTableHead className="table-light text-primary">
                     <tr>
-                      <th scope="col">Employees</th>
+                      <th scope="col">Date</th>
 
-                      <th scope="col">Details</th>
+                      <th scope="col">Check In</th>
+                      <th scope="col">Check Out</th>
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                  {employee &&
-                      employee.map((data) => (
+                    {data &&
+                      data.map((data) => (
                         <tr>
-                         
                           <th scope="row">
-                            {data.firstName} {data.lastName}
+                            {moment.utc(data.checkIn).format("MMM D, YYYY")}
                           </th>
-                          <th>
-                            <button
-                              className="btn btn-link"
-                              onClick={(e) => {
-                                userDetail(
-                                  e,
-                                  data._id,
-                                  data.firstName,
-                                  data.lastName
-                                );
-                              }}
-                            >
-                              View Attendance
-                            </button>
-                          </th>
+                          <td>
+                            {!data.checkIn
+                              ? null
+                              : moment(data.checkIn).format("LT")}
+                          </td>
+                          <td>
+                            {!data.checkOut ? (
+                              <button
+                                type="button"
+                                className="btn btn-link"
+                                data-mdb-toggle="modal"
+                                data-mdb-target="#exampleModal2"
+                                onClick={(e) => {
+                                  getCheckOutID(e, data._id);
+                                }}
+                              >
+                                Check Out
+                              </button>
+                            ) : (
+                              moment(data.checkOut).format("LT")
+                            )}
+                          </td>
                         </tr>
                       ))}
                   </MDBTableBody>
@@ -371,4 +304,4 @@ let getEmployee = async () => {
   );
 };
 
-export default AdminAttendance;
+export default AttendanceDetail;

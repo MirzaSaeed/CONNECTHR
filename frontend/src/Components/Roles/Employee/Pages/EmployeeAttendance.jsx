@@ -29,15 +29,15 @@ const EmployeeAttendance = () => {
       navigate("*");
     }
   };
-  
+
   const [checkInData, setCheckInData] = useState({
     checkIn: "",
   });
   const [checkOutData, setCheckOutData] = useState({
     checkOut: "",
   });
-  const { date, checkIn } = checkInData;
-  const {  checkOut } = checkOutData;
+  const { checkIn } = checkInData;
+  const { checkOut } = checkOutData;
 
   const onCheckIn = (e) => {
     setCheckInData((prevState) => ({
@@ -60,7 +60,6 @@ const EmployeeAttendance = () => {
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
-      alert("Attendance Marked");
       navigate("/auth/employee/attendance");
       setCheckInData({
         checkIn: "",
@@ -72,26 +71,29 @@ const EmployeeAttendance = () => {
   // ! GET attendance
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/employee/attendance/checkIn/", {
+      .get("http://localhost:9000/auth/employee/attendance/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
   };
   const markCheckOut = async (e) => {
     e.preventDefault();
+    const checkOutId = localStorage.getItem('checkOutId');
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/employee/attendance/checkOut/`, checkOutData, {
+      .put(`/auth/employee/attendance/checkOut/${checkOutId}`, checkOutData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
-      alert("Attendance Marked");
       navigate("/auth/employee/attendance");
       setCheckOutData({
         checkOut: "",
       });
     }
+  };
+  const getCheckOutID = (e, id) => {
+    localStorage.setItem("checkOutId", id);
   };
   useEffect(() => {
     isUserAuth();
@@ -111,12 +113,12 @@ const EmployeeAttendance = () => {
                 >
                   <MDBRow className=" d-flex ">
                     <div
-                      className="col-md-6 col-lg-4 my-3 text-dark "
+                      className="col-md-6 col-lg-6 my-3 text-dark "
                       style={{ fontSize: 18 + "px", padding: 8 + "px" }}
                     >
                       Mark Attendance:
                     </div>
-                    <div className="col-md-6 col-lg-4 my-3">
+                    <div className="col-md-6 col-lg-6 my-3">
                       <button
                         type="button"
                         className="btn btn-info btn-block btn-lg"
@@ -124,16 +126,6 @@ const EmployeeAttendance = () => {
                         data-mdb-target="#exampleModal1"
                       >
                         Check In
-                      </button>
-                    </div>
-                    <div className="col-md-6 col-lg-4 my-3">
-                      <button
-                        type="button"
-                        className="btn btn-info btn-block btn-lg"
-                        data-mdb-toggle="modal"
-                        data-mdb-target="#exampleModal2"
-                      >
-                        Check Out
                       </button>
                     </div>
                     <div
@@ -158,25 +150,14 @@ const EmployeeAttendance = () => {
                           </div>
                           <MDBRow className=" modal-body">
                             <div className="col-md-12 col-lg-4 my-3">
-                              <label htmlFor="checkIn">Select Date</label>
-                            </div>
-                            <div className="col-md-12 col-lg-8 my-2">
-                              <MDBInput
-                                className="col-lg-4"
-                                id="checkIn"
-                                type="date"
-                                name="date"
-                                onChange={onCheckIn}
-                                value={date}
-                              />
-                            </div>
-                            <div className="col-md-12 col-lg-4 my-3">
-                              <label htmlFor="checkIn">Select Time</label>
+                              <label htmlFor="checkIn">
+                                Select Date & Time
+                              </label>
                             </div>
                             <div className="col-md-12 col-lg-8 my-2">
                               <MDBInput
                                 id="checkIn"
-                                type="time"
+                                type="datetime-local"
                                 name="checkIn"
                                 onChange={onCheckIn}
                                 value={checkIn}
@@ -279,12 +260,24 @@ const EmployeeAttendance = () => {
                           <td>
                             {!data.checkIn
                               ? null
-                              : moment.utc(data.checkIn).format("LT")}
+                              : moment(data.checkIn).format("LT")}
                           </td>
                           <td>
-                            {!data.checkOut
-                              ? null
-                              : moment.utc(data.checkOut).format("LT")}
+                            {!data.checkOut ? (
+                              <button
+                                type="button"
+                                className="btn btn-link"
+                                data-mdb-toggle="modal"
+                                data-mdb-target="#exampleModal2"
+                                onClick={(e) => {
+                                  getCheckOutID(e, data._id);
+                                }}
+                              >
+                                Check Out
+                              </button>
+                            ) : (
+                              moment(data.checkOut).format("LT")
+                            )}
                           </td>
                         </tr>
                       ))}

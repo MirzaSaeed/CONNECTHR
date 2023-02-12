@@ -21,6 +21,7 @@ import AddPayrollDetail from "./Components/Roles/Admin/Pages/AddPayrollDetail";
 import PayrollDetail from "./Components/Roles/Admin/Pages/PayrollDetail";
 import LeaveDetail from "./Components/Roles/Admin/Pages/LeaveDetails";
 import UpdateSalary from "./Components/Roles/Admin/Pages/UpdateSalary";
+import AttendanceDetail from "./Components/Roles/Admin/Pages/AttendanceDetail";
 
 function App(props) {
   return (
@@ -39,6 +40,7 @@ function App(props) {
       <Route path="/auth/admin/profile" element={<AdminProfile />} />
       <Route path="/auth/admin/settings" element={<EditAdminProfile />} />
       <Route path="/auth/admin/attendance" element={<AdminAttendance />} />
+      <Route path="/auth/admin/employeeAttendance/:id" element={<AttendanceDetail />} />
       <Route path="/auth/admin/payroll" element={<AdminPayroll />} />
       <Route path="/auth/admin/leaves" element={<AdminLeaves />} />
       <Route path="/auth/admin/leaves/:id" element={<LeaveDetail />} />

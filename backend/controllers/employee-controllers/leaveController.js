@@ -1,6 +1,6 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
-const leaveModel = require("../../models/employee-models/userLeave");
+const leaveModel = require("../../models/employee-models/leaveModel");
 const employeeModel = require("../../models/employee-models/userModel");
 
 // * POST Request

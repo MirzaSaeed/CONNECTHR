@@ -70,7 +70,6 @@ const StarterPage = () => {
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
-      alert("login Successful");
       navigate("/auth/admin/home");
       setFormData({
         email: "",
@@ -87,7 +86,6 @@ const StarterPage = () => {
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
-      alert("login Successful");
       navigate("/auth/employee/home");
       setFormData({
         email: "",
