@@ -231,11 +231,11 @@ const EmployeeLeaves = () => {
                           <td>{moment.utc(data.to).format("D MMM, YYYY")}</td>
                           <td>{data.reason}</td>
                           {data.status === "pending" ? (
-                            <th className="text-danger">{data.status}</th>
+                            <th className="text-danger">Pending</th>
                           ) : data.status === "approved" ? (
-                            <th color="text-success">{data.status}</th>
+                            <th color="text-success">Approved</th>
                           ) : (
-                            <th color="text-warning">{data.status}</th>
+                            <th color="text-warning">Rejected</th>
                           )}
                         </tr>
                       ))}

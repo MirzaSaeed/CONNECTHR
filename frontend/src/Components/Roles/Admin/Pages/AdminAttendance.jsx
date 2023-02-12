@@ -19,22 +19,23 @@ import { Loading } from "../../../Core/Loading";
 const AdminAttendance = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
-  if(!user){
-    navigate('*')
+  if (!user) {
+    navigate("*");
   }
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     isUserAuth();
-  },[]);
+  }, []);
   return (
     <AdminSidebar>
       <Loading>
@@ -101,7 +102,9 @@ const AdminAttendance = () => {
                                   <option value="" disabled selected>
                                     Select
                                   </option>
-                                  <option value="Islamabad">Muhammad Qasim</option>
+                                  <option value="Islamabad">
+                                    Muhammad Qasim
+                                  </option>
                                 </select>
                               </div>
                             </MDBRow>
@@ -165,7 +168,9 @@ const AdminAttendance = () => {
                                   <option value="" disabled selected>
                                     Select
                                   </option>
-                                  <option value="Islamabad">Muhammad Qasim</option>
+                                  <option value="Islamabad">
+                                    Muhammad Qasim
+                                  </option>
                                 </select>
                               </div>
                             </MDBRow>

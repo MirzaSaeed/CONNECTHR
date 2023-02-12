@@ -27,25 +27,24 @@ const PayrollDetail = () => {
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
   };
   const response = async () => {
-    console.log(emp[0])
     await axios
-      .get(`http://localhost:9000/auth/employee/payroll/${emp[0]}`, {
+      .get(`http://localhost:9000/auth/admin/payroll/${emp[0]}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
   };
 
   const updatePayroll = async (e, pid) => {
-    console.log(pid);
     e.preventDefault();
     await axios.put(
-      `/auth/employee/payroll/update?eid=${emp[0]}&pid=${pid}`,
+      `/auth/admin/payroll/update?eid=${emp[0]}&pid=${pid}`,
       null,
       {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -54,32 +53,52 @@ const PayrollDetail = () => {
   };
 
   const getUserID = async (e) => {
-      e.preventDefault();
-     navigate(generatePath(`/auth/admin/payroll/add/${emp[0]}`));
-    };
+    e.preventDefault();
+    navigate(generatePath(`/auth/admin/payroll/add/${emp[0]}`));
+  };
+  const getEmpId = async (e) => {
+    e.preventDefault();
+    navigate(generatePath(`/auth/admin/payroll/salary/update/${emp[0]}`));
+  };
   useEffect(() => {
     isUserAuth();
   }, []);
-  useEffect(()=>{
-response();
-  },[data])
+  useEffect(() => {
+    response();
+  }, [data]);
   return (
     <AdminSidebar>
       <Loading>
-        <Admin title="Payroll" />
+        <Admin title="Payroll Detail" />
         <MDBContainer fluid className="fadeIn">
           <MDBRow className="mx-2">
             <MDBCard>
+              <span className="mt-2 mx-3">
+                <Link role={"button"} color="primary" to="/auth/admin/payroll">
+                  Back
+                </Link>
+              </span>
               <MDBCardHeader>
                 <Link to="/auth/admin/payroll/add">
                   <button
                     type="button"
                     className="btn btn-primary"
                     onClick={(e) => {
-                      getUserID(e, data.id);
+                      getUserID(e);
                     }}
                   >
                     Add Payroll
+                  </button>
+                </Link>
+                <Link to="/auth/admin/payroll/salary/update">
+                  <button
+                    type="button"
+                    className="btn btn-primary mx-2"
+                    onClick={(e) => {
+                      getEmpId(e);
+                    }}
+                  >
+                    Update Salary
                   </button>
                 </Link>
               </MDBCardHeader>
@@ -100,9 +119,7 @@ response();
                           <th scope="row">
                             {moment.utc(data.month).format("D MMM, YYYY")}
                           </th>
-                          <th>
-                            {data.name}
-                          </th>
+                          <th>{data.name}</th>
                           <th>{data.salary}</th>
 
                           {data.status === "pending" ? (

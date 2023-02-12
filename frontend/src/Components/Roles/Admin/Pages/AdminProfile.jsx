@@ -19,32 +19,32 @@ const AdminProfile = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([{}]);
   let user = JSON.parse(localStorage.getItem("user"));
-  if(!user){
-    navigate('*')
+  if (!user) {
+    navigate("*");
   }
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
   };
   const response = async () => {
     await axios
-    .get("http://localhost:9000/auth/admin/me/", {
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-    .then((res) => setData(res.data));
+      .get("http://localhost:9000/auth/admin/me/", {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => setData(res.data));
   };
-  
+
   useEffect(() => {
     isUserAuth();
     response();
   }, []);
-  console.log();
   return (
     <AdminSidebar>
       <Loading>

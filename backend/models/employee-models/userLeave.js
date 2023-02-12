@@ -31,8 +31,11 @@ const leaveSchema = new Schema({
   },
   employee: {
     type: Schema.Types.ObjectId,
-    required: true,
     ref: "employeeAuths",
+  },
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: "adminAuths",
   },
 });
 

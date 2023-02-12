@@ -11,7 +11,7 @@ const applyLeave = asyncHandler(async (req, res) => {
   if (!user) {
     res.status(400).json({ message: "User Not Found" });
   } else {
-    const { from, to, reason, type, status, name } = req.body;
+    const { from, to, reason, type } = req.body;
     if (!(from || to || reason || type)) {
       res.status(400).json("ERROR! Please add Leave Reasoning Details");
     } else {
@@ -20,16 +20,24 @@ const applyLeave = asyncHandler(async (req, res) => {
         to,
         reason,
         type,
+        admin: req.user.admin,
         status: "pending",
         employee: req.user.id,
         name: nam,
       });
       if (applied) {
-        user.populate("leaves");
-        user.leaves.push(applied);
-        res.status(201).send({ from, to, reason, type, status: "pending",
-        employee: req.user.id,
-        name: nam, });
+        res
+          .status(201)
+          .send({
+            from,
+            to,
+            reason,
+            type,
+            status: "pending",
+            employee: req.user.id,
+            name: nam,
+            admin: req.user.id,
+          });
       }
     }
   }

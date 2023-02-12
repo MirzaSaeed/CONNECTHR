@@ -6,11 +6,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 const Admin = (prop) => {
   const navigate = useNavigate();
-   let user = JSON.parse(localStorage.getItem("user"));
-  if(!user){
-    navigate('*')
+  let user = JSON.parse(localStorage.getItem("user"));
+  if (!user) {
+    navigate("*");
   }
-  const handleLogOut = () => {
+  const handleLogOut = (e) => {
     localStorage.removeItem("user");
     navigate("/");
   };
@@ -68,7 +68,11 @@ const Admin = (prop) => {
                 Settings
               </Link>
             </li>
-            <li className="dropdown-item" onClick={handleLogOut}>
+            <li
+              className="dropdown-item"
+              onClick={(e) => handleLogOut(e)}
+              style={{ cursor: "pointer" }}
+            >
               Logout
             </li>
           </ul>

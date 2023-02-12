@@ -26,16 +26,16 @@ const EmployeeDetail = () => {
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
   };
- 
+
   const response = async () => {
-    console.log(`id is geting in res ${Uid}`);
     await axios
-      .get(`http://localhost:9000/auth/employee/register/${Uid}`, {
+      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
@@ -43,7 +43,7 @@ const EmployeeDetail = () => {
 
   const deleteUser = async (e, id) => {
     await axios
-      .delete(`http://localhost:9000/auth/employee/register/${id}`, {
+      .delete(`http://localhost:9000/auth/admin/register/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(localStorage.removeItem("Uid"), navigate("/auth/admin/home"));
@@ -104,6 +104,10 @@ const EmployeeDetail = () => {
                     <th>Contact Number:</th>
                     <td>{data.contactNumber}</td>
                   </tr>
+                  <tr>
+                    <th>Salary:</th>
+                    <td>{data.salary}</td>
+                  </tr>
 
                   <MDBTypography
                     tag="h6"
@@ -114,7 +118,9 @@ const EmployeeDetail = () => {
                   </MDBTypography>
                   <tr>
                     <th>LinkedIn:</th>
-                    <td href={data.linkedIn}>{data.linkedIn}</td>
+                    <td>
+                      <a href={data.social}>{data.social}</a>
+                    </td>
                   </tr>
                 </MDBTableBody>
               </MDBTable>

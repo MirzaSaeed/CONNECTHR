@@ -11,7 +11,7 @@ import {
 } from "mdb-react-ui-kit";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { generatePath, Link, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
@@ -27,7 +27,8 @@ const AdminLeaves = () => {
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
@@ -37,12 +38,21 @@ const AdminLeaves = () => {
   const [formData, setFormData] = useState([{}]);
   let response = async () => {
     await axios
-      .get(`/auth/admin/leaves/`, {
+      .get(`/auth/admin/register/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
   };
 
+  const userDetail = async (e, Uid, fname, lname) => {
+    localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
+    e.preventDefault();
+    await axios
+      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then(navigate(generatePath(`/auth/admin/leaves/${Uid}`)));
+  };
   useEffect(() => {
     isUserAuth();
     response();
@@ -51,66 +61,51 @@ const AdminLeaves = () => {
   return (
     <AdminSidebar>
       <Loading>
-        <Admin title="Leave" />
-        <MDBContainer fluid className="fadeIn ">
-          <MDBRow>
-            <MDBCol className="col-lg-12">
-              <MDBCard className="text-center">
-                <MDBCardBody className="career-search mb-60">
-                  <MDBTable striped hover className="shadow-4">
-                    <MDBTableHead className="table-light text-primary">
-                      <tr>
-                        <th scope="col">Employee Name</th>
-
-                        <th scope="col">Leave Type</th>
-                        <th scope="col">Leave from</th>
-                        <th scope="col">Leave To</th>
-                        <th scope="col">Reason</th>
-                        <th scope="col">Status & Action</th>
-                      </tr>
-                    </MDBTableHead>
-                    <MDBTableBody className="table-group-divider table-divider-color">
-                      {formData &&
-                        formData.map((data) => (
-                          <tr>
-                            <th scope="row">{data.name}</th>
-                            <th>{data.type}</th>
-                            <td>
-                              {moment.utc(data.from).format("D MMM, YYYY")}
-                            </td>
-                            <td>{moment.utc(data.to).format("D MMM, YYYY")}</td>
-                            <td>{data.reason}</td>
-                            {data.status === "pending" ? (
-                              <th className="">
-                                <button className="btn btn-link text-danger">
-                                  {data.status}
-                                </button>{" "}
-                                <button className="btn btn-link">
-                                  Approve
-                                </button>
-                                <button className="btn btn-link">Reject</button>
-                              </th>
-                            ) : data.status === "approved" ? (
-                              <th className="">
-                                <button className="btn btn-link text-success">
-                                  {data.status}
-                                </button>
-                              </th>
-                            ) : (
-                              <th className="">
-                                <button className="btn btn-link text-warning">
-                                  {data.status}
-                                </button>
-                              </th>
-                            )}
-
-                          </tr>
-                        ))}
-                    </MDBTableBody>
-                  </MDBTable>
-                </MDBCardBody>
-              </MDBCard>
-            </MDBCol>
+        <Admin title="Leaves" />
+        <MDBContainer fluid className="fadeIn">
+          <MDBRow className="mx-2">
+            <MDBCard>
+              <span className="mt-3 mx-2">
+                <Link role={"button"} color="primary" to="/auth/admin/home">
+                  Back
+                </Link>
+              </span>
+              <MDBCardBody className="text-center">
+                <MDBTable striped hover className="shadow-4">
+                  <MDBTableHead className="table-light text-primary">
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </MDBTableHead>
+                  <MDBTableBody className="table-group-divider table-divider-color">
+                    {formData &&
+                      formData.map((data) => (
+                        <tr>
+                          <th>
+                            {data.firstName} {data.lastName}
+                          </th>
+                          <th>
+                            <button
+                              className="btn btn-link"
+                              onClick={(e) => {
+                                userDetail(
+                                  e,
+                                  data._id,
+                                  data.firstName,
+                                  data.lastName
+                                );
+                              }}
+                            >
+                              View Detail
+                            </button>
+                          </th>
+                        </tr>
+                      ))}
+                  </MDBTableBody>
+                </MDBTable>
+              </MDBCardBody>
+            </MDBCard>
           </MDBRow>
         </MDBContainer>
       </Loading>

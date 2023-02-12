@@ -24,7 +24,8 @@ const EditAdminProfile = () => {
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (res.status === 401) {
       navigate("*");
     }
@@ -67,7 +68,6 @@ const EditAdminProfile = () => {
   } = formData;
 
   // * Console check
-  console.log(formData);
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -81,9 +81,10 @@ const EditAdminProfile = () => {
       .put(`/auth/admin/register/${user._id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
+
     if (response) {
-      alert("Information Updated");
+     
       navigate("/auth/admin/profile");
       setFormData({
         firstName: "",

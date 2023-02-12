@@ -24,7 +24,7 @@ const AddEmployee = () => {
       .get("http://localhost:9000/auth/admin/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert("Not Authorized"));
     if (res.status === 401) {
       navigate("*");
     }
@@ -47,17 +47,16 @@ const AddEmployee = () => {
       [e.target.name]: e.target.value, //? for key used: name and for value used: value
     }));
   };
-  console.log(formData);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isUserAuth) {
       // ! Fetch API data
       let response = await axios
-        .post("http://localhost:9000/auth/employee/register/", formData, {
+        .post("http://localhost:9000/auth/admin/addEmployee/", formData, {
           headers: { Authorization: `Bearer ${user.token}` },
         })
-        .catch((Error) => alert(JSON.stringify(Error.response.data)));
-      console.log(response);
+        .catch((Error) => alert("Not Authorized"));
+
       if (response) {
         setFormData({
           firstName: "",

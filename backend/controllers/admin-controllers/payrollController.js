@@ -7,7 +7,7 @@ const addPayroll = asyncHandler(async (req, res) => {
   const isAdmin = await adminModel.findById(req.user.id);
   if (isAdmin) {
     const user = await employeeModel.findById(req.params.id);
-    const { name,salary,month } = req.body;
+    const { name, salary, month } = req.body;
     const addPayroll = await employeePayroll.create({
       status: "pending",
       month,
@@ -16,13 +16,13 @@ const addPayroll = asyncHandler(async (req, res) => {
       admin: req.user.id,
       salary: user.salary,
     });
-    if(!addPayroll){
-      res.status(400).json("Please Add all fields")
+    if (!addPayroll) {
+      res.status(400).json("Please Add all fields");
     }
     res.status(200).json({
       month,
-     name: name,
-     salary
+      name: name,
+      salary,
     });
   } else {
     res.status(401).json("Not Authorized");
@@ -62,16 +62,31 @@ const getPayroll = asyncHandler(async (req, res) => {
 });
 
 const getPayrollById = asyncHandler(async (req, res) => {
-  const isEmployee = await employeePayroll.find({employee: req.params.id});
-  if(!isEmployee){
-    res.json("ERROR")
+  const isEmployee = await employeePayroll.find({ employee: req.params.id });
+  if (!isEmployee) {
+    res.status(401).json("Not Authorized");
   }
-  res.json(isEmployee);
+  res.status(201).json(isEmployee);
+});
+
+const updateSalary = asyncHandler(async (req, res) => {
+  const getUser = await employeeModel.findById(req.params.id);
+  if (!getUser) {
+    res.status(400).json("employee not found");
+    throw new Error("User not found");
+  }
+  const { salary } = req.body;
+
+  const updateUser = await employeeModel.findByIdAndUpdate(req.params.id, {
+    salary,
+  });
+  res.status(200).json(updateUser);
 });
 
 module.exports = {
   getPayroll,
   getPayrollById,
   updatePayroll,
+  updateSalary,
   addPayroll,
 };

@@ -13,9 +13,11 @@ import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
 
-const AddPayrollDetail = () => {
+const UpdateSalary = () => {
   const navigate = useNavigate();
-  const emp = JSON.parse(localStorage.getItem("Uid"));
+  const userData = JSON.stringify(localStorage.getItem("Uid"));
+  const parseIt =JSON.parse(userData)
+  const emp = JSON.parse(parseIt)
   const id = emp[0];
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -34,11 +36,9 @@ const AddPayrollDetail = () => {
   };
 
   const [formData, setFormData] = useState({
-    month: "",
-    name: "",
+    salary: "",
   });
-  const { month, name } = formData;
-  formData.name = `${emp[1]} ${emp[2]}`;
+  const { salary } = formData;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -46,14 +46,13 @@ const AddPayrollDetail = () => {
       [e.target.name]: e.target.value, //? for key used: name and for value used: value
     }));
   };
-
   const addPayroll = async (e) => {
     e.preventDefault();
     await axios
-      .post(`http://localhost:9000/auth/admin/payroll/add/${id}`, formData, {
+      .put(`http://localhost:9000/auth//admin/payroll/updateSalary/${id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .then((res) => navigate(generatePath(`/auth/admin/payroll/${id}`)));
+      .then((res) => navigate(generatePath(`/auth/admin/home`)));
   };
   useEffect(() => {
     isUserAuth();
@@ -61,17 +60,18 @@ const AddPayrollDetail = () => {
   return (
     <AdminSidebar>
       <Loading>
-        <Admin title="Add Payroll" />
+        <Admin title="Update Salary" />
         <MDBContainer fluid className="fadeIn">
           <div className="tab-pane" id="settings">
             <form>
               <MDBRow className="mb-3">
                 <div className="col-md-12 col-lg-6 ">
                   <MDBInput
-                    id="month"
-                    type="date"
-                    name="month"
-                    value={month}
+                    id="salary"
+                    type="number"
+                    name="salary"
+                    placeholder="Type new Salary"
+                    value={salary}
                     onChange={onChange}
                   />
                 </div>
@@ -83,7 +83,7 @@ const AddPayrollDetail = () => {
                   addPayroll(e);
                 }}
               >
-                Add to Payroll
+               Update Salary
               </button>
             </form>
           </div>
@@ -93,4 +93,4 @@ const AddPayrollDetail = () => {
   );
 };
 
-export default AddPayrollDetail;
+export default UpdateSalary;

@@ -9,7 +9,7 @@ const User = (prop) => {
   if (!user) {
     navigate("*");
   }
-  const handleLogOut = () => {
+  const handleLogOut = (e) => {
     localStorage.removeItem("user");
     navigate("/");
   };
@@ -66,7 +66,11 @@ const User = (prop) => {
                 Settings
               </Link>
             </li>
-            <li className="dropdown-item" onClick={handleLogOut}>
+            <li
+              className="dropdown-item"
+              onClick={(e) => handleLogOut(e)}
+              style={{ cursor: "pointer" }}
+            >
               Logout
             </li>
           </ul>

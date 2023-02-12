@@ -1,12 +1,13 @@
 const asyncHandler = require("express-async-handler");
 const userModel = require("../../models/admin-models/userModel");
+const employeeModel = require("../../models/employee-models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { secret } = require("../../middleware/errorMiddleware");
 
 // * POST Request
 // * Post /auth/admin/register
-const registerUser = asyncHandler(async (req, res) => {
+const registerAdmin = asyncHandler(async (req, res) => {
   const {
     firstName,
     lastName,
@@ -157,7 +158,7 @@ const loggedInuser = asyncHandler(async (req, res) => {
 });
 
 const updateInformation = asyncHandler(async (req, res) => {
-  const getUser = await userModel.findById(req.params.id);
+  const getUser = await employeeModel.findById(req.params.id);
   if (!getUser) {
     res.status(400).json("employee not found");
     throw new Error("User not found");
@@ -183,7 +184,7 @@ const updateInformation = asyncHandler(async (req, res) => {
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  const updateUser = await userModel.findByIdAndUpdate(req.params.id, {
+  const updateUser = await employeeModel.findByIdAndUpdate(req.params.id, {
       firstName,
       lastName,
       gender,
@@ -210,7 +211,7 @@ const generateToken = (id) => {
 };
 
 module.exports = {
-  registerUser,
+  registerAdmin,
   updateInformation,
   loggedInuser,
   loginUser,

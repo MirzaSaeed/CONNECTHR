@@ -47,7 +47,7 @@ export default function Dashboard() {
 
   const getData = async () => {
     await axios
-      .get("http://localhost:9000/auth/employee/register/", {
+      .get("http://localhost:9000/auth/admin/register/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData({ users: res.data }));
@@ -56,7 +56,7 @@ export default function Dashboard() {
     localStorage.setItem("Uid", Uid);
     e.preventDefault();
     await axios
-      .get(`http://localhost:9000/auth/employee/register/${Uid}`, {
+      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(navigate(generatePath(`/auth/admin/${Uid}`)));
