@@ -1,4 +1,5 @@
 import { React } from "react";
+import { Route, Routes } from "react-router-dom";
 import "mdb-react-ui-kit/dist/css/mdb.min.css";
 import EmployeeProfile from "./Components/Roles/Employee/Pages/EmployeeProfile";
 import EditEmployeeProfile from "./Components/Roles/Employee/Pages/EditEmployeeProfile";
@@ -10,7 +11,6 @@ import AdminPayroll from "./Components/Roles/Admin/Pages/AdminPayroll";
 import AdminAttendance from "./Components/Roles/Admin/Pages/AdminAttendance";
 import AdminProfile from "./Components/Roles/Admin/Pages/AdminProfile";
 import AdminLeaves from "./Components/Roles/Admin/Pages/AdminLeaves";
-import { Route, Routes } from "react-router-dom";
 import StarterPage from "./Components/Core/StarterPage";
 import Register from "./Components/Core/Register";
 import Dashboard from "./Components/Roles/Admin/Pages/Dashboard";
