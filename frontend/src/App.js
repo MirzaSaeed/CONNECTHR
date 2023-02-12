@@ -10,7 +10,7 @@ import AdminPayroll from "./Components/Roles/Admin/Pages/AdminPayroll";
 import AdminAttendance from "./Components/Roles/Admin/Pages/AdminAttendance";
 import AdminProfile from "./Components/Roles/Admin/Pages/AdminProfile";
 import AdminLeaves from "./Components/Roles/Admin/Pages/AdminLeaves";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import StarterPage from "./Components/Core/StarterPage";
 import Register from "./Components/Core/Register";
 import Dashboard from "./Components/Roles/Admin/Pages/Dashboard";
@@ -35,9 +35,7 @@ function App(props) {
       />
       <Route path="/auth/employee/payroll" element={<EmployeePayroll />} />
       <Route path="/auth/employee/leaves" element={<EmployeeLeaves />} />
-      <Route path="/auth/admin/home" 
-      element={<Dashboard />}>
-      </Route>
+      <Route path="/auth/admin/home" element={<Dashboard />}></Route>
       <Route path="/auth/admin/profile" element={<AdminProfile />} />
       <Route path="/auth/admin/settings" element={<EditAdminProfile />} />
       <Route path="/auth/admin/attendance" element={<AdminAttendance />} />
@@ -46,11 +44,16 @@ function App(props) {
       <Route path="/auth/admin/leaves/:id" element={<LeaveDetail />} />
       <Route path="/auth/admin/addEmployee" element={<AddEmployee />} />
       <Route path="/auth/admin/:id" element={<EmployeeDetail />} />
-      <Route path="/auth/admin/payroll/add/:id" element={<AddPayrollDetail />} />
+      <Route
+        path="/auth/admin/payroll/add/:id"
+        element={<AddPayrollDetail />}
+      />
       <Route path="/auth/admin/payroll/:id" element={<PayrollDetail />} />
-      <Route path="/auth/admin/payroll/salary/update/:id" element={<UpdateSalary />} />
+      <Route
+        path="/auth/admin/payroll/salary/update/:id"
+        element={<UpdateSalary />}
+      />
       <Route path="*" element={<Error />} />
-
     </Routes>
   );
 }

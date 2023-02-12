@@ -6,7 +6,6 @@ import {
   MDBTabsContent,
   MDBTabsPane,
   MDBInput,
-  MDBBtn,
   MDBTypography,
   MDBCard,
   MDBCardBody,
