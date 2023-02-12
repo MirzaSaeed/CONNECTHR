@@ -2,14 +2,12 @@ import axios from "axios";
 import {
   MDBCard,
   MDBCardBody,
-  MDBCol,
   MDBContainer,
   MDBRow,
   MDBTable,
   MDBTableBody,
   MDBTableHead,
 } from "mdb-react-ui-kit";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";

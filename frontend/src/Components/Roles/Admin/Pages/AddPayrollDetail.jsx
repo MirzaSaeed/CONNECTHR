@@ -1,14 +1,11 @@
 import axios from "axios";
 import {
-  MDBCol,
   MDBContainer,
   MDBInput,
-  MDBRadio,
   MDBRow,
-  MDBTypography,
 } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
-import { generatePath, Link, useNavigate } from "react-router-dom";
+import { generatePath, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";

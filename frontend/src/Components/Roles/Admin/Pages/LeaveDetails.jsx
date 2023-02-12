@@ -5,7 +5,6 @@ import AdminSidebar from "../../../Core/AdminSidebar";
 import {
   MDBCard,
   MDBCardBody,
-  MDBCardHeader,
   MDBContainer,
   MDBRow,
   MDBTable,
@@ -13,7 +12,7 @@ import {
   MDBTableHead,
 } from "mdb-react-ui-kit";
 import Admin from "../../../Core/Admin";
-import { generatePath, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 const LeaveDetail = () => {
