@@ -5,7 +5,7 @@ const adminModel = require("../../models/admin-models/userModel");
 const employeeModel = require("../../models/employee-models/userModel");
 
 // * POST Request
-// * Post /auth/employee/attendance
+// * Post /auth/admin/attendance
 const markCheckInAttendance = asyncHandler(async (req, res) => {
   const user = await adminModel.findById(req.user.id);
   if (!user) {
@@ -14,28 +14,29 @@ const markCheckInAttendance = asyncHandler(async (req, res) => {
     const { checkIn } = req.body;
     if (!checkIn) {
       res.status(400).json("ERROR! Please add Attendace Date & Time");
-    }
-    const mark = await attendanceModel.create({
-      checkIn,
-      admin: req.user.id,
-    });
-    if (mark) {
-      res.status(201).json({
+    } else {
+      const mark = await attendanceModel.create({
         checkIn,
+        admin: req.user.id,
       });
+      if (mark) {
+        res.status(201).json({
+          checkIn,
+        });
+      }
     }
   }
 });
 
 // * GET Request
-// * Get /auth/employee/attendance/checkIn
+// * Get /auth/admin/attendance/checkIn
 const getAttendance = asyncHandler(async (req, res) => {
   const attendance = await attendanceModel.find({ admin: req.user.id });
   res.status(200).json(attendance);
 });
 
 // * PUT Request
-// * PUT /auth/employee/attendance
+// * PUT /auth/admin/attendance
 const markCheckOutAttendance = asyncHandler(async (req, res) => {
   // const pId = req.params.id;
   const isAdmin = await adminModel.findById(req.user.id);
@@ -52,6 +53,8 @@ const markCheckOutAttendance = asyncHandler(async (req, res) => {
 });
 
 // * Employee Attendance
+// * GET Request
+// * Get /auth/admin/employeeAttendance
 const getEmployeeAttendanceById = asyncHandler(async (req, res) => {
   const isEmployee = await employeeAttendanceModel.find({
     employee: req.params.id,
@@ -72,16 +75,17 @@ const markCheckInEmployeeAttendance = asyncHandler(async (req, res) => {
     const { checkIn } = req.body;
     if (!checkIn) {
       res.status(400).json("ERROR! Please add Attendace Date & Time");
-    }
-    const mark = await employeeAttendanceModel.create({
-      checkIn,
-      employee: req.params.id,
-      admin: req.user.id,
-    });
-    if (mark) {
-      res.status(201).json({
+    } else {
+      const mark = await employeeAttendanceModel.create({
         checkIn,
+        employee: req.params.id,
+        admin: req.user.id,
       });
+      if (mark) {
+        res.status(201).json({
+          checkIn,
+        });
+      }
     }
   }
 });
@@ -89,8 +93,8 @@ const markCheckInEmployeeAttendance = asyncHandler(async (req, res) => {
 // * PUT Request
 // * PUT /auth/admin/employeeAttendance/checkOut
 const markCheckOutEmployeeAttendance = asyncHandler(async (req, res) => {
-    const eId = req.query.eid;
-     const aId = req.query.aid;
+  const eId = req.query.eid;
+  const aId = req.query.aid;
   // const pId = req.params.id;
   const isEmployee = await employeeModel.findById(eId);
   if (isEmployee) {
