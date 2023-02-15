@@ -80,7 +80,7 @@ const EmployeePayroll = () => {
                           {data.status === "pending" ? (
                             <th className="text-danger">Pending</th>
                           ) : data.status === "approved" ? (
-                            <th className="text-success">Approved</th>
+                            <th className="text-success">Delivered</th>
                           ) : null}
                         </tr>
                       ))}

@@ -25,7 +25,7 @@ router.post("/employee/login", loginUser);
 router.get("/employee/me", employeeProtect, loggedInuser);
 
 // ? Update Employee Information
-router.put("/employee/register/", employeeProtect, updateEmployee);
+router.put("/employee/register/:id", employeeProtect, updateEmployee);
 
 // ? Attendance Routes
 router.post(

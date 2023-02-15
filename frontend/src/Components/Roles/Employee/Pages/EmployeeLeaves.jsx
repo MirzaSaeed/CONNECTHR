@@ -233,9 +233,9 @@ const EmployeeLeaves = () => {
                           {data.status === "pending" ? (
                             <th className="text-danger">Pending</th>
                           ) : data.status === "approved" ? (
-                            <th color="text-success">Approved</th>
+                            <th className="text-success">Approved</th>
                           ) : (
-                            <th color="text-warning">Rejected</th>
+                            <th className="text-warning">Rejected</th>
                           )}
                         </tr>
                       ))}
