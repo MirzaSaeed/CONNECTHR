@@ -1,18 +1,19 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const PORT = process.env.PORT || 9000;
 const { URL } = require("./config/dbConfig");
+
 const cors = require("cors");
-const PORT = 9000;
 const admin = {
   auth: require("./routes/admin-routes/userRoutes"),
 };
 const employee = {
   auth: require("./routes/employee-routes/userRoutes"),
 };
-
+const dotenv = require("dotenv").config();
 const app = express();
 app.use(cors());
-app.use(express.json(),express.urlencoded({ extended: true }));
+app.use(express.json(), express.urlencoded({ extended: true }));
 
 // ? PORT Ruuning on F 9000
 app.listen(PORT, () => {

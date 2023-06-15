@@ -105,6 +105,7 @@ const getUserData = asyncHandler(async (req, res) => {});
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  
   // ? Check for User Email
   const user = await userModel.findOne({ email });
   if (user && (await bcrypt.compare(password, user.password))) {

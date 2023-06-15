@@ -60,10 +60,9 @@ const PayrollDetail = () => {
     e.preventDefault();
     navigate(generatePath(`/auth/admin/payroll/salary/update/${emp[0]}`));
   };
+
   useEffect(() => {
     isUserAuth();
-  }, []);
-  useEffect(() => {
     response();
   }, [data]);
   return (

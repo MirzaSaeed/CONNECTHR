@@ -16,10 +16,10 @@ import User from "../../../Core/User";
 import "../CSS/Employee Profile.css";
 const EmployeeProfile = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState([{}]);
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
     navigate("*");
+    const [data, setData] = useState([{}]);
   }
   const isUserAuth = async () => {
     const res = await axios

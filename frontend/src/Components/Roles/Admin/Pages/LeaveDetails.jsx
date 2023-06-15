@@ -58,10 +58,9 @@ const LeaveDetail = () => {
   };
   useEffect(() => {
     isUserAuth();
-  }, []);
-  useEffect(() => {
     response();
   }, [data]);
+  
   return (
     <AdminSidebar>
       <Loading>

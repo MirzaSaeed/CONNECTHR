@@ -40,7 +40,7 @@ const EmployeePayroll = () => {
   useEffect(() => {
     isUserAuth();
     response();
-  }, []);
+  }, [data]);
 
   return (
     <EmployeeSidebar>

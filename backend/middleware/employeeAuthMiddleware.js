@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
-const { secret } = require("./errorMiddleware");
+const secret = process.env.SECRET_KEY
 const userModel = require("../models/employee-models/userModel");
 
 const protect = asyncHandler(async (req, res, next) => {

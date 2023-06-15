@@ -90,7 +90,6 @@ const getEmployees = asyncHandler(async (req, res) => {
 // * Get /auth/employee/register/id;
 const getEmployee = asyncHandler(async (req, res) => {
   const getUsers = await userModel.findById((admin = req.params.id));
-
   res.status(200).json(getUsers);
 });
 

@@ -126,7 +126,7 @@ let getEmployee = async () => {
     isUserAuth();
     response();
     getEmployee();
-  }, []);
+  }, [formData]);
 
   return (
     <AdminSidebar>

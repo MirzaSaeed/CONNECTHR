@@ -55,7 +55,7 @@ const AdminPayroll = () => {
   useEffect(() => {
     isUserAuth();
     response();
-  }, []);
+  }, [formData]);
   return (
     <AdminSidebar>
       <Loading>

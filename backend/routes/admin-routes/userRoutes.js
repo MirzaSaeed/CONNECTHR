@@ -32,10 +32,10 @@ const { getAttendance, markCheckOutAttendance, markCheckInAttendance, getEmploye
 // ? Authentication
 router.post("/admin/login", loginUser);
 router.get("/admin/me", adminProtect, loggedInuser);
+router.post("/admin/register", registerAdmin);
 
 // ? Employee Lists Dashboard
 router.post("/admin/addEmployee", adminProtect, registerUser);
-router.post("/admin/register", registerAdmin);
 
 router.get("/admin/register", adminProtect, getEmployees);
 router.get("/admin/register/:id", adminProtect, getEmployee);
