@@ -1,4 +1,5 @@
 const path = require("path");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
@@ -20,17 +21,29 @@ app.listen(PORT, () => {
   console.log(`Port is running on ${PORT}`);
 });
 
+const client = new MongoClient(URL, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
 // ? Database Connection
 const connectDB = async () => {
   try {
-    mongoose.set("strictQuery", false);
-    const conn = await mongoose.connect(URL);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.log(error);
+    await client.connect();
+    await client.db("admin").command({ ping: 1 });
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
   }
 };
-connectDB(); //? DB Call
+connectDB().catch(console.dir);
+
+//? DB Call
 
 // * Admin Routes
 app.use("/auth", admin.auth);
