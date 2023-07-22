@@ -13,7 +13,7 @@ import { generatePath, Link, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
-
+import { BASE_URL } from "../../../../config";
 const AdminLeaves = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
@@ -22,7 +22,7 @@ const AdminLeaves = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -36,7 +36,7 @@ const AdminLeaves = () => {
   const [formData, setFormData] = useState([{}]);
   let response = async () => {
     await axios
-      .get(`/auth/admin/register/`, {
+      .get(`${BASE_URL}/auth/admin/register/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
@@ -46,7 +46,7 @@ const AdminLeaves = () => {
     localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
     e.preventDefault();
     await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+      .get(`${BASE_URL}/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(navigate(generatePath(`/auth/admin/leaves/${Uid}`)));

@@ -1,15 +1,11 @@
 import axios from "axios";
-import {
-  MDBContainer,
-  MDBInput,
-  MDBRow,
-} from "mdb-react-ui-kit";
+import { MDBContainer, MDBInput, MDBRow } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
-
+import { BASE_URL } from "../../../../config";
 const AddPayrollDetail = () => {
   const navigate = useNavigate();
   const emp = JSON.parse(localStorage.getItem("Uid"));
@@ -20,7 +16,7 @@ const AddPayrollDetail = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -47,7 +43,7 @@ const AddPayrollDetail = () => {
   const addPayroll = async (e) => {
     e.preventDefault();
     await axios
-      .post(`http://localhost:9000/auth/admin/payroll/add/${id}`, formData, {
+      .post(`${BASE_URL}/auth/admin/payroll/add/${id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => navigate(generatePath(`/auth/admin/payroll/${id}`)));

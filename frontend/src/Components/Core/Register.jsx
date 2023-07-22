@@ -12,6 +12,7 @@ import { Loading } from "./Loading";
 import Layout from "./Layout";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { BASE_URL } from "../../config";
 const Register = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -60,7 +61,7 @@ const Register = () => {
     e.preventDefault();
     // ! Fetch API data
     let response = await axios
-      .post("http://localhost:9000/auth/admin/register/", formData)
+      .post(`${BASE_URL}/auth/admin/register/`, formData)
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       alert("Registration Successful");
@@ -82,7 +83,6 @@ const Register = () => {
         zipcode: "",
       });
     }
-     
   };
 
   return (

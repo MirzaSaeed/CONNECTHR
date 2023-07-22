@@ -15,13 +15,13 @@ import AdminSidebar from "../../../Core/AdminSidebar";
 import Admin from "../../../Core/Admin";
 import { useState } from "react";
 import axios from "axios";
-
+import { BASE_URL } from "../../../../config";
 const EditAdminProfile = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -84,7 +84,6 @@ const EditAdminProfile = () => {
       .catch((Error) => alert("Not Authorized"));
 
     if (response) {
-     
       navigate("/auth/admin/profile");
       setFormData({
         firstName: "",

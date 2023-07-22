@@ -13,9 +13,11 @@ import {
   MDBTableHead,
 } from "mdb-react-ui-kit";
 import Admin from "../../../Core/Admin";
-import {  Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../../../config";
+
 const AttendanceDetail = () => {
   const navigate = useNavigate();
   const emp = JSON.parse(localStorage.getItem("Uid"));
@@ -25,7 +27,7 @@ const AttendanceDetail = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -38,7 +40,7 @@ const AttendanceDetail = () => {
   // ? Get Employee attendance
   const response = async () => {
     await axios
-      .get(`http://localhost:9000/auth/admin/employeeAttendance/${emp[0]}`, {
+      .get(`${BASE_URL}/auth/admin/employeeAttendance/${emp[0]}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
@@ -69,9 +71,13 @@ const AttendanceDetail = () => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/admin/employeeAttendance/checkIn/${id}`, checkInData, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
+      .post(
+        `${BASE_URL}/auth/admin/employeeAttendance/checkIn/${id}`,
+        checkInData,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       setCheckInData({
@@ -86,7 +92,7 @@ const AttendanceDetail = () => {
     // ! Fetch API data PUT method
     let response = await axios
       .put(
-        `/auth/admin/employeeAttendance/checkOut?eid=${emp[0]}&aid=${checkOutId}`,
+        `${BASE_URL}/auth/admin/employeeAttendance/checkOut?eid=${emp[0]}&aid=${checkOutId}`,
         checkOutData,
         {
           headers: { Authorization: `Bearer ${user.token}` },
@@ -114,14 +120,16 @@ const AttendanceDetail = () => {
           <MDBRow className="mx-2">
             <MDBCard className="mx-auto ">
               <span className="mt-2 mx-3">
-                <Link role={"button"} color="primary" to="/auth/admin/attendance">
+                <Link
+                  role={"button"}
+                  color="primary"
+                  to="/auth/admin/attendance"
+                >
                   Back
                 </Link>
               </span>
               <MDBCardBody className="career-search text-center mb-60">
-                <div
-                  className="career-form mb-60 bg-light col-lg-5 mb-4 px-4   shadow-4"
-                >
+                <div className="career-form mb-60 bg-light col-lg-5 mb-4 px-4   shadow-4">
                   <MDBRow className=" d-flex ">
                     <div
                       className="col-md-6 col-lg-6 my-3 text-dark "

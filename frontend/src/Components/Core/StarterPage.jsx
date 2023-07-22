@@ -15,13 +15,13 @@ import "../../app.css";
 import { Loading } from "./Loading";
 import Layout from "./Layout";
 import axios from "axios";
-
+import { BASE_URL } from "../../config";
 const StarterPage = () => {
   const navigate = useNavigate();
   let token = JSON.parse(localStorage.getItem("user"));
   const [basicActive, setBasicActive] = useState("admin");
   const isUserAuth = async () => {
-    const res = await axios.get("http://localhost:9000/auth/admin/me/", {
+    const res = await axios.get(`${BASE_URL}/auth/admin/me/`, {
       headers: { Authorization: `Bearer ${token.token}` },
     });
     if (res.status === 200) {
@@ -29,7 +29,7 @@ const StarterPage = () => {
     }
   };
   const employeeRES = async () => {
-    const res = await axios.get("http://localhost:9000/auth/employee/me/", {
+    const res = await axios.get(`${BASE_URL}/auth/employee/me/`, {
       headers: { Authorization: `Bearer ${token.token}` },
     });
     if (res.status === 200) {
@@ -66,7 +66,7 @@ const StarterPage = () => {
 
     // ! Fetch API data
     let response = await axios
-      .post("http://localhost:9000/auth/admin/login/", formData)
+      .post(`${BASE_URL}/auth/admin/login/`, formData)
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
@@ -82,8 +82,8 @@ const StarterPage = () => {
 
     // ! Fetch API data
     let response = await axios
-      .post("http://localhost:9000/auth/employee/login/", formData).then
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .post(`${BASE_URL}/auth/employee/login/`, formData)
+      .then.catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/auth/employee/home");

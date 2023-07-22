@@ -1,20 +1,17 @@
 import axios from "axios";
-import {
-  MDBContainer,
-  MDBInput,
-  MDBRow,
-} from "mdb-react-ui-kit";
+import { MDBContainer, MDBInput, MDBRow } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
 import { generatePath, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
+import { BASE_URL } from "../../../../config";
 
 const UpdateSalary = () => {
   const navigate = useNavigate();
   const userData = JSON.stringify(localStorage.getItem("Uid"));
-  const parseIt =JSON.parse(userData)
-  const emp = JSON.parse(parseIt)
+  const parseIt = JSON.parse(userData);
+  const emp = JSON.parse(parseIt);
   const id = emp[0];
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -22,7 +19,7 @@ const UpdateSalary = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -36,7 +33,6 @@ const UpdateSalary = () => {
     salary: "",
   });
   const { salary } = formData;
-
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -46,7 +42,7 @@ const UpdateSalary = () => {
   const addPayroll = async (e) => {
     e.preventDefault();
     await axios
-      .put(`http://localhost:9000/auth//admin/payroll/updateSalary/${id}`, formData, {
+      .put(`${BASE_URL}/auth/admin/payroll/updateSalary/${id}`, formData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => navigate(generatePath(`/auth/admin/home`)));
@@ -80,7 +76,7 @@ const UpdateSalary = () => {
                   addPayroll(e);
                 }}
               >
-               Update Salary
+                Update Salary
               </button>
             </form>
           </div>

@@ -14,6 +14,7 @@ import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
 import "../CSS/Employee Profile.css";
+import { BASE_URL } from "../../../../config";
 const EmployeeProfile = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
@@ -23,7 +24,7 @@ const EmployeeProfile = () => {
   const [data, setData] = useState([{}]);
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/employee/me/", {
+      .get(`${BASE_URL}/auth/employee/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((err) => alert(JSON.stringify(err.response.data)));
@@ -33,7 +34,7 @@ const EmployeeProfile = () => {
   };
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/employee/me/", {
+      .get(`${BASE_URL}/auth/employee/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));

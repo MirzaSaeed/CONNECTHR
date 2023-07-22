@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const PORT = process.env.PORT;
-
+const URL = process.env.MONGO_URL;
 const cors = require("cors");
 const admin = {
   auth: require("./routes/admin-routes/userRoutes"),
@@ -24,8 +24,11 @@ app.listen(PORT, () => {
 const connectDB = async () => {
   try {
     mongoose.set("strictQuery", false);
-    const conn = await mongoose.connect(process.env.MONGO_URL);
-  } catch (error) {}
+    const conn = await mongoose.connect(URL);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 connectDB(); //? DB Call
 
@@ -36,9 +39,9 @@ app.use("/auth", admin.auth);
 
 app.use("/auth/", employee.auth);
 
-app.use(express.static(path.join(__dirname, "../frontend/build")));
-app.use("*", (req, res) =>
-  res.sendFile(
-    path.resolve(__dirname, "../", "frontend", "build", "index.html")
-  )
-);
+// app.use(express.static(path.join(__dirname, "../frontend/build")));
+// app.use("*", (req, res) =>
+//   res.sendFile(
+//     path.resolve(__dirname, "../", "frontend", "build", "index.html")
+//   )
+// );

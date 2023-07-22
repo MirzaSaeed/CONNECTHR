@@ -16,6 +16,8 @@ import Admin from "../../../Core/Admin";
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../../../config";
+
 const PayrollDetail = () => {
   const navigate = useNavigate();
   const emp = JSON.parse(localStorage.getItem("Uid"));
@@ -24,7 +26,7 @@ const PayrollDetail = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -35,7 +37,7 @@ const PayrollDetail = () => {
   };
   const response = async () => {
     await axios
-      .get(`http://localhost:9000/auth/admin/payroll/${emp[0]}`, {
+      .get(`${BASE_URL}/auth/admin/payroll/${emp[0]}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
@@ -44,7 +46,7 @@ const PayrollDetail = () => {
   const updatePayroll = async (e, pid) => {
     e.preventDefault();
     await axios.put(
-      `/auth/admin/payroll/update?eid=${emp[0]}&pid=${pid}`,
+      `${BASE_URL}/auth/admin/payroll/update?eid=${emp[0]}&pid=${pid}`,
       null,
       {
         headers: { Authorization: `Bearer ${user.token}` },

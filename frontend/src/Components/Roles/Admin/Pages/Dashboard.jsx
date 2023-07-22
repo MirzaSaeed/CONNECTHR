@@ -13,7 +13,7 @@ import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
 import { generatePath, Link, useNavigate } from "react-router-dom";
-
+import { BASE_URL } from "../../../../config";
 export default function Dashboard() {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
@@ -26,7 +26,7 @@ export default function Dashboard() {
 
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -36,7 +36,7 @@ export default function Dashboard() {
   };
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setVerify(res.verify));
@@ -45,7 +45,7 @@ export default function Dashboard() {
 
   const getData = async () => {
     await axios
-      .get("http://localhost:9000/auth/admin/register/", {
+      .get(`${BASE_URL}/auth/admin/register/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData({ users: res.data }));
@@ -54,12 +54,11 @@ export default function Dashboard() {
     localStorage.setItem("Uid", Uid);
     e.preventDefault();
     await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+      .get(`${BASE_URL}/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(navigate(generatePath(`/auth/admin/${Uid}`)));
   };
-
   useEffect(() => {
     isUserAuth();
     response();

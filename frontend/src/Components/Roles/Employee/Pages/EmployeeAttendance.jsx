@@ -15,13 +15,13 @@ import { useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
-
+import { BASE_URL } from "../../../../config";
 const EmployeeAttendance = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/employee/me/", {
+      .get(`${BASE_URL}/auth/employee/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -55,7 +55,7 @@ const EmployeeAttendance = () => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/employee/attendance/checkIn/`, checkInData, {
+      .post(`${BASE_URL}/auth/employee/attendance/checkIn/`, checkInData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -71,19 +71,23 @@ const EmployeeAttendance = () => {
   // ! GET attendance
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/employee/attendance/", {
+      .get(`${BASE_URL}/auth/employee/attendance/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
   };
   const markCheckOut = async (e) => {
     e.preventDefault();
-    const checkOutId = localStorage.getItem('checkOutId');
+    const checkOutId = localStorage.getItem("checkOutId");
     // ! Fetch API data PUT method
     let response = await axios
-      .put(`/auth/employee/attendance/checkOut/${checkOutId}`, checkOutData, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
+      .put(
+        `${BASE_URL}/auth/employee/attendance/checkOut/${checkOutId}`,
+        checkOutData,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       navigate("/auth/employee/attendance");

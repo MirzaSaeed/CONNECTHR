@@ -14,7 +14,7 @@ import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-
+import { BASE_URL } from "../../../../config";
 const EmployeeDetail = () => {
   const navigate = useNavigate();
   const Uid = localStorage.getItem("Uid");
@@ -23,7 +23,7 @@ const EmployeeDetail = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -35,7 +35,7 @@ const EmployeeDetail = () => {
 
   const response = async () => {
     await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+      .get(`${BASE_URL}/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
@@ -43,7 +43,7 @@ const EmployeeDetail = () => {
 
   const deleteUser = async (e, id) => {
     await axios
-      .delete(`http://localhost:9000/auth/admin/register/${id}`, {
+      .delete(`${BASE_URL}/auth/admin/register/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(localStorage.removeItem("Uid"), navigate("/auth/admin/home"));

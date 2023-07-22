@@ -15,6 +15,7 @@ import Admin from "../../../Core/Admin";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../../../config";
 const LeaveDetail = () => {
   const navigate = useNavigate();
   const emp = JSON.parse(localStorage.getItem("Uid"));
@@ -23,7 +24,7 @@ const LeaveDetail = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -34,7 +35,7 @@ const LeaveDetail = () => {
   };
   const response = async () => {
     await axios
-      .get(`http://localhost:9000/auth/admin/leaves/${emp[0]}`, {
+      .get(`${BASE_URL}/auth/admin/leaves/${emp[0]}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));
@@ -43,7 +44,7 @@ const LeaveDetail = () => {
   const approveLeave = async (e, pid) => {
     e.preventDefault();
     await axios.put(
-      `/auth/admin/leave/approve?eid=${emp[0]}&pid=${pid}`,
+      `${BASE_URL}/auth/admin/leave/approve?eid=${emp[0]}&pid=${pid}`,
       null,
       {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -52,15 +53,19 @@ const LeaveDetail = () => {
   };
   const deniedLeave = async (e, pid) => {
     e.preventDefault();
-    await axios.put(`/auth/admin/leave/denied?eid=${emp[0]}&pid=${pid}`, null, {
-      headers: { Authorization: `Bearer ${user.token}` },
-    });
+    await axios.put(
+      `${BASE_URL}/auth/admin/leave/denied?eid=${emp[0]}&pid=${pid}`,
+      null,
+      {
+        headers: { Authorization: `Bearer ${user.token}` },
+      }
+    );
   };
   useEffect(() => {
     isUserAuth();
     response();
   }, [data]);
-  
+
   return (
     <AdminSidebar>
       <Loading>
@@ -68,13 +73,12 @@ const LeaveDetail = () => {
         <MDBContainer fluid className="fadeIn">
           <MDBRow className="mx-2">
             <MDBCard>
-            <span className="mt-3 mx-2">
-                  <Link role={"button"} color="primary" to="/auth/admin/leaves">
-                    Back
-                  </Link>
-                </span>
+              <span className="mt-3 mx-2">
+                <Link role={"button"} color="primary" to="/auth/admin/leaves">
+                  Back
+                </Link>
+              </span>
               <MDBCardBody>
-                
                 <div className="text-center">
                   <MDBTable striped hover className="shadow-4">
                     <MDBTableHead className="table-light text-primary">

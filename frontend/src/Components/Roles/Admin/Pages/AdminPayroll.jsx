@@ -15,6 +15,7 @@ import Admin from "../../../Core/Admin";
 import { generatePath, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../../../config";
 const AdminPayroll = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
@@ -23,7 +24,7 @@ const AdminPayroll = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -37,7 +38,7 @@ const AdminPayroll = () => {
   const [formData, setFormData] = useState([{}]);
   let response = async () => {
     await axios
-      .get(`/auth/admin/register/`, {
+      .get(`${BASE_URL}/auth/admin/register/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
@@ -47,7 +48,7 @@ const AdminPayroll = () => {
     localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
     e.preventDefault();
     await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+      .get(`${BASE_URL}/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(navigate(generatePath(`/auth/admin/payroll/${Uid}`)));
@@ -55,7 +56,7 @@ const AdminPayroll = () => {
   useEffect(() => {
     isUserAuth();
     response();
-  }, [formData]);
+  }, []);
   return (
     <AdminSidebar>
       <Loading>

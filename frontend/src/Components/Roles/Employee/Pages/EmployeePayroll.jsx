@@ -15,6 +15,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { BASE_URL } from "../../../../config";
+
 const EmployeePayroll = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([{}]);
@@ -22,7 +24,7 @@ const EmployeePayroll = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/employee/me/", {
+      .get(`${BASE_URL}/auth/employee/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -32,7 +34,7 @@ const EmployeePayroll = () => {
   };
   const response = async () => {
     await axios
-      .get(`http://localhost:9000/auth/employee/payroll/`, {
+      .get(`${BASE_URL}/auth/employee/payroll/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));

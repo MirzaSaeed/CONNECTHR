@@ -14,7 +14,7 @@ import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-
+import { BASE_URL } from "../../../../config";
 const AdminProfile = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([{}]);
@@ -24,7 +24,7 @@ const AdminProfile = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -35,7 +35,7 @@ const AdminProfile = () => {
   };
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setData(res.data));

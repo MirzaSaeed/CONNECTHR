@@ -17,7 +17,7 @@ import { generatePath, useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
-
+import { BASE_URL } from "../../../../config";
 const AdminAttendance = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
@@ -26,7 +26,7 @@ const AdminAttendance = () => {
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -61,7 +61,7 @@ const AdminAttendance = () => {
     e.preventDefault();
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/admin/attendance/checkIn/`, checkInData, {
+      .post(`${BASE_URL}/auth/admin/attendance/checkIn/`, checkInData, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -77,7 +77,7 @@ const AdminAttendance = () => {
   // ! GET attendance
   const response = async () => {
     await axios
-      .get("http://localhost:9000/auth/admin/attendance/", {
+      .get(`${BASE_URL}/auth/admin/attendance/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then((res) => setFormData(res.data));
@@ -87,9 +87,13 @@ const AdminAttendance = () => {
     const checkOutId = localStorage.getItem("checkOutId");
     // ! Fetch API data PUT method
     let response = await axios
-      .put(`/auth/admin/attendance/checkOut/${checkOutId}`, checkOutData, {
-        headers: { Authorization: `Bearer ${user.token}` },
-      })
+      .put(
+        `${BASE_URL}/auth/admin/attendance/checkOut/${checkOutId}`,
+        checkOutData,
+        {
+          headers: { Authorization: `Bearer ${user.token}` },
+        }
+      )
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response) {
       navigate("/auth/admin/attendance");
@@ -102,22 +106,22 @@ const AdminAttendance = () => {
     localStorage.setItem("checkOutId", id);
   };
 
-// ? get Emlployee List
-const [employee, setEmployee] = useState([{}])
-let getEmployee = async () => {
-  await axios
-    .get(`/auth/admin/register/`, {
-      headers: { Authorization: `Bearer ${user.token}` },
-    })
-    .then((res) => setEmployee(res.data));
-};
+  // ? get Emlployee List
+  const [employee, setEmployee] = useState([{}]);
+  let getEmployee = async () => {
+    await axios
+      .get(`${BASE_URL}/auth/admin/register/`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      })
+      .then((res) => setEmployee(res.data));
+  };
 
   // ? Get Employee Id
   const userDetail = async (e, Uid, fname, lname) => {
     localStorage.setItem("Uid", JSON.stringify([Uid, fname, lname]));
     e.preventDefault();
     await axios
-      .get(`http://localhost:9000/auth/admin/register/${Uid}`, {
+      .get(`${BASE_URL}/auth/admin/register/${Uid}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .then(navigate(generatePath(`/auth/admin/employeeAttendance/${Uid}`)));
@@ -336,10 +340,9 @@ let getEmployee = async () => {
                     </tr>
                   </MDBTableHead>
                   <MDBTableBody className="table-group-divider table-divider-color">
-                  {employee &&
+                    {employee &&
                       employee.map((data) => (
                         <tr>
-                         
                           <th scope="row">
                             {data.firstName} {data.lastName}
                           </th>

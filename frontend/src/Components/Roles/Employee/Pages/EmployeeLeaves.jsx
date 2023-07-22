@@ -16,13 +16,14 @@ import { useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import { Loading } from "../../../Core/Loading";
 import User from "../../../Core/User";
+import { BASE_URL } from "../../../../config";
 
 const EmployeeLeaves = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/employee/me/", {
+      .get(`${BASE_URL}/auth/employee/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));
@@ -43,7 +44,7 @@ const EmployeeLeaves = () => {
 
     // ! Fetch API data PUT method
     let response = await axios
-      .post(`/auth/employee/leaves/apply/`, data, {
+      .post(`${BASE_URL}/auth/employee/leaves/apply/`, data, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert(JSON.stringify(Error.response.data)));

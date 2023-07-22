@@ -1,24 +1,20 @@
 import axios from "axios";
-import {
-  MDBContainer,
-  MDBInput,
-  MDBRow,
-} from "mdb-react-ui-kit";
+import { MDBContainer, MDBInput, MDBRow } from "mdb-react-ui-kit";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Admin from "../../../Core/Admin";
 import AdminSidebar from "../../../Core/AdminSidebar";
 import { Loading } from "../../../Core/Loading";
-
+import { BASE_URL } from "../../../../config";
 const AddEmployee = () => {
   const navigate = useNavigate();
   let user = JSON.parse(localStorage.getItem("user"));
-  if(!user){
-    navigate('*')
+  if (!user) {
+    navigate("*");
   }
   const isUserAuth = async () => {
     const res = await axios
-      .get("http://localhost:9000/auth/admin/me/", {
+      .get(`${BASE_URL}/auth/admin/me/`, {
         headers: { Authorization: `Bearer ${user.token}` },
       })
       .catch((Error) => alert("Not Authorized"));
@@ -26,9 +22,9 @@ const AddEmployee = () => {
       navigate("*");
     }
   };
-  useEffect(()=>{
+  useEffect(() => {
     isUserAuth();
-  },[]);
+  }, []);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -49,7 +45,7 @@ const AddEmployee = () => {
     if (isUserAuth) {
       // ! Fetch API data
       let response = await axios
-        .post("http://localhost:9000/auth/admin/addEmployee/", formData, {
+        .post(`${BASE_URL}/auth/admin/addEmployee/`, formData, {
           headers: { Authorization: `Bearer ${user.token}` },
         })
         .catch((Error) => alert("Not Authorized"));
@@ -63,7 +59,7 @@ const AddEmployee = () => {
           password: "",
           salary: "",
         });
-        navigate('/auth/admin/home')
+        navigate("/auth/admin/home");
       }
     }
   };
