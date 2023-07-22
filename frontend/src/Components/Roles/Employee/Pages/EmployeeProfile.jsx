@@ -19,14 +19,14 @@ const EmployeeProfile = () => {
   let user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
     navigate("*");
-    const [data, setData] = useState([{}]);
   }
+  const [data, setData] = useState([{}]);
   const isUserAuth = async () => {
     const res = await axios
       .get("http://localhost:9000/auth/employee/me/", {
         headers: { Authorization: `Bearer ${user.token}` },
       })
-      .catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((err) => alert(JSON.stringify(err.response.data)));
     if (res.status === 401) {
       navigate("*");
     }
@@ -43,7 +43,6 @@ const EmployeeProfile = () => {
     isUserAuth();
     response();
   }, []);
-  console.log(data);
 
   return (
     <EmployeeSidebar>
@@ -93,7 +92,7 @@ const EmployeeProfile = () => {
                     <th>Phone:</th>
                     <td>{data.contactNumber}</td>
                   </tr>
-                  
+
                   <MDBTypography
                     tag="h6"
                     className="mt-3 mb-2 "
@@ -104,9 +103,7 @@ const EmployeeProfile = () => {
                   <tr>
                     <th>Linkedin:</th>
                     <td>
-                      <a href={data.social}>
-                        {data.social}
-                      </a>
+                      <a href={data.social}>{data.social}</a>
                     </td>
                   </tr>
                 </MDBTableBody>

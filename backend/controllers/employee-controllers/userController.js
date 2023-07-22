@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const userModel = require("../../models/employee-models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { secret } = require("../../middleware/errorMiddleware");
+const secret = process.env.SECRET_KEY;
 const adminModel = require("../../models/admin-models/userModel");
 
 // * POST Request
@@ -132,7 +132,6 @@ const loggedInuser = asyncHandler(async (req, res) => {
     city,
     zipcode,
     social,
-
   } = await userModel.findById(req.user.id);
   res.status(200).json({
     id: _id,
@@ -211,7 +210,6 @@ const deleteEmployee = asyncHandler(async (req, res) => {
   employee.remove();
   res.status(200).json({ id: req.params.id });
 });
-
 
 // * Generate JWT
 const generateToken = (id) => {

@@ -3,7 +3,7 @@ const userModel = require("../../models/admin-models/userModel");
 const employeeModel = require("../../models/employee-models/userModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { secret } = require("../../middleware/errorMiddleware");
+const secret = process.env.SECRET_KEY;
 
 // * POST Request
 // * Post /auth/admin/register
@@ -105,7 +105,6 @@ const getUserData = asyncHandler(async (req, res) => {});
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  
   // ? Check for User Email
   const user = await userModel.findOne({ email });
   if (user && (await bcrypt.compare(password, user.password))) {
@@ -186,20 +185,20 @@ const updateInformation = asyncHandler(async (req, res) => {
   const hashedPassword = await bcrypt.hash(password, salt);
 
   const updateUser = await employeeModel.findByIdAndUpdate(req.params.id, {
-      firstName,
-      lastName,
-      gender,
-      birthday,
-      city,
-      role,
-      email,
-      password: hashedPassword,
-      contactNumber,
-      companyName,
-      companyURL,
-      branchName,
-      totalEmployees,
-      zipcode,
+    firstName,
+    lastName,
+    gender,
+    birthday,
+    city,
+    role,
+    email,
+    password: hashedPassword,
+    contactNumber,
+    companyName,
+    companyURL,
+    branchName,
+    totalEmployees,
+    zipcode,
   });
   res.status(200).json(updateUser);
 });

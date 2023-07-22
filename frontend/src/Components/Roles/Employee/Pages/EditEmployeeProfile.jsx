@@ -4,7 +4,6 @@ import User from "../../../Core/User";
 import "../../../../app.css";
 import "../CSS/Employee Profile.css";
 import {
-  MDBBtn,
   MDBCol,
   MDBContainer,
   MDBIcon,
@@ -14,7 +13,7 @@ import {
   MDBRow,
   MDBTypography,
 } from "mdb-react-ui-kit";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EmployeeSidebar from "../../../Core/EmployeeSidebar";
 import axios from "axios";
 
@@ -483,9 +482,13 @@ const EditEmployeeProfile = () => {
               </MDBRow>
 
               <MDBCol>
-                <button className="btn btn-primary mb-4" type="button" onClick={(e) => {
+                <button
+                  className="btn btn-primary mb-4"
+                  type="button"
+                  onClick={(e) => {
                     onSubmit(e);
-                  }}>
+                  }}
+                >
                   Save
                 </button>
               </MDBCol>

@@ -6,6 +6,7 @@ const employeeModel = require("../models/employee-models/userModel");
 
 const employeeProtect = asyncHandler(async (req, res, next) => {
   let token;
+  console.log(process.env.SECRET_KEY);
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
