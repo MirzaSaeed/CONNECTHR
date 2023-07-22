@@ -83,7 +83,7 @@ const StarterPage = () => {
     // ! Fetch API data
     let response = await axios
       .post(`${BASE_URL}/auth/employee/login/`, formData)
-      .then.catch((Error) => alert(JSON.stringify(Error.response.data)));
+      .catch((Error) => alert(JSON.stringify(Error.response.data)));
     if (response.data) {
       localStorage.setItem("user", JSON.stringify(response.data));
       navigate("/auth/employee/home");
