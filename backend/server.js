@@ -31,17 +31,26 @@ const client = new MongoClient(URL, {
 // ? Database Connection
 const connectDB = async () => {
   try {
-    await client.connect();
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
+    mongoose
+      .connect(URL, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+      })
+      .then(() => console.log("DataBase Connected"));
+    //   await client.connect();
+    //   await client.db("admin").command({ ping: 1 });
+    //   console.log(
+    //     "Pinged your deployment. You successfully connected to MongoDB!"
+    //   );
+    // } finally {
+    //   // Ensures that the client will close when you finish/error
+    //   await client.close();
+    // }
+  } catch (err) {
+    console.log(err);
   }
 };
-connectDB().catch(console.dir);
+connectDB();
 
 //? DB Call
 
