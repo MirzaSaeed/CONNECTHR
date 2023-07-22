@@ -18,6 +18,9 @@
   ],
   "author": "Mirza Saeed MERN Stack Developer",
   "license": "ISC",
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "caniuse-lite": "^1.0.30001452",
@@ -29,8 +32,5 @@
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.7.0",
     "mongoose": "^6.8.3"
-  },
-  "engines": {
-    "node": "16.x"
   }
 }
